@@ -12,3 +12,9 @@ class TimetableAdmin(admin.ModelAdmin):
 class DayAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     fields = ('name',)
+
+
+@admin.register(Class)
+class ClassAdmin(admin.ModelAdmin):
+    list_display = ('grade', 'letter', 'timetable')
+    fields = ('grade', 'letter')
