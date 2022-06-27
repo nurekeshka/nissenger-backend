@@ -59,3 +59,20 @@ class Group(models.Model):
     class Meta:
         verbose_name = 'group'
         verbose_name_plural = 'groups'
+    
+    def __str__(self):
+        return self.name
+
+
+class Teacher(models.Model):
+    name = models.CharField(max_length=255, verbose_name='name')
+    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'teacher'
+        verbose_name_plural = 'teachers'
+
+    def __str__(self):
+        return self.name
+
+
