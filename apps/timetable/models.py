@@ -13,7 +13,7 @@ class Timetable(models.Model):
         verbose_name_plural = 'timetables'
     
     def __str__(self):
-        return str(self.publication_date)
+        return str(self.publication_date) if self.publication_date is not None else str(self.download_date)
 
 
 class Day(models.Model):
@@ -61,7 +61,7 @@ class Group(models.Model):
         verbose_name_plural = 'groups'
     
     def __str__(self):
-        return self.name
+        return f'{self.name}: {list(map(str, self.classes.all()))}'
 
 
 class Teacher(models.Model):
