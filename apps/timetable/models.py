@@ -76,3 +76,16 @@ class Teacher(models.Model):
         return self.name
 
 
+class Subject(models.Model):
+    name = models.CharField(max_length=255, verbose_name='name')
+    teachers = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teachers')
+
+    class Meta:
+        verbose_name = 'subject'
+        verbose_name_plural = 'subjects'
+    
+    def __str__(self):
+        return self.name
+
+
+
