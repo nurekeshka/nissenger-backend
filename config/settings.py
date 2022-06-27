@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
+    # Project apps
+    'apps.accounts.apps.AccountsConfig',
+    'apps.timetable.apps.TimetableConfig',
 ]
 
 MIDDLEWARE = [
