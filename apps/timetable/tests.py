@@ -13,3 +13,5 @@ class ClassTestCase(APITestCase):
     def test_model_invalid(self):
         with self.assertRaises(ValidationError):
             Class.objects.create(grade=1, letter='A').full_clean()
+        with self.assertRaises(ValidationError):
+            Class.objects.create(grade=11, letter='1').full_clean()
