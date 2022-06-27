@@ -11,6 +11,9 @@ class Timetable(models.Model):
     class Meta:
         verbose_name = 'timetable'
         verbose_name_plural = 'timetables'
+    
+    def __str__(self):
+        return self.pk
 
 
 class Day(models.Model):
@@ -37,6 +40,8 @@ class Class(models.Model):
             validate_class_letter
         ]
     )
+
+    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'class'
