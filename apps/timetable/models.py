@@ -13,7 +13,7 @@ class Timetable(models.Model):
         verbose_name_plural = 'timetables'
     
     def __str__(self):
-        return self.pk
+        return self.id
 
 
 class Day(models.Model):
@@ -117,4 +117,4 @@ class Lesson(models.Model):
         verbose_name_plural = 'lessons'
     
     def __str__(self):
-        return self.subject.name
+        return self.subject
