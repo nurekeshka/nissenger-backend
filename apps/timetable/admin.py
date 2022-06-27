@@ -24,3 +24,9 @@ class ClassAdmin(admin.ModelAdmin):
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
     fields = ('name', 'classes')
+
+
+@admin.register(Teacher)
+class TeacherAdmin(admin.ModelAdmin):
+    list_display = ('name', 'timetable')
+    fields = ('name',)
