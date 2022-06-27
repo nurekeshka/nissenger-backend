@@ -1,3 +1,4 @@
+from .exceptions import validate_class_grade
 from django.db import models
 
 
@@ -13,7 +14,7 @@ class Day(models.Model):
 
 
 class Class(models.Model):
-    grade = models.IntegerField(verbose_name='grade', blank=False, null=False)
+    grade = models.IntegerField(verbose_name='grade', blank=False, null=False, validators=[validate_class_grade])
     letter = models.CharField(verbose_name='letter', max_length=1, blank=False, null=False)
 
     class Meta:
