@@ -4,6 +4,15 @@ from .exceptions import validate_class_letter
 from django.db import models
 
 
+class Timetable(models.Model):
+    download_date = models.DateTimeField(auto_now_add=True, verbose_name='download date')
+    publication_date = models.DateTimeField(default='', blank=True, verbose_name='publication date')
+
+    class Meta:
+        verbose_name = 'timetable'
+        verbose_name_plural = 'timetables'
+
+
 class Day(models.Model):
     name = models.CharField(verbose_name='name',
                             max_length=15, blank=False, null=False)
