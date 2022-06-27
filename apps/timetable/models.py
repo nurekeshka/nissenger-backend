@@ -98,3 +98,19 @@ class Office(models.Model):
     def __str__(self):
         return self.name
 
+
+class Lesson(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='subject')
+    office = models.ForeignKey(Office, on_delete=models.CASCADE, verbose_name='office')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teacher')
+
+    start = models.TimeField(verbose_name='start')
+    end = models.TimeField(verbose_name='end')
+    day = models.ForeignKey(Day, on_delete=models.CASCADE, verbose_name='day')
+
+    class Meta:
+        verbose_name = 'lesson'
+        verbose_name_plural = 'lessons'
+    
+    def __str__(self):
+        return self.subject.name
