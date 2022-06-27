@@ -18,3 +18,9 @@ class DayAdmin(admin.ModelAdmin):
 class ClassAdmin(admin.ModelAdmin):
     list_display = ('grade', 'letter', 'timetable')
     fields = ('grade', 'letter')
+
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'timetable')
+    fields = ('name', 'classes')
