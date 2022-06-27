@@ -30,3 +30,9 @@ class GroupAdmin(admin.ModelAdmin):
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
     fields = ('name',)
+
+
+@admin.register(Subject)
+class SubjectAdmin(admin.ModelAdmin):
+    list_display = ('name', 'timetable')
+    fields = ('name', 'teachers')

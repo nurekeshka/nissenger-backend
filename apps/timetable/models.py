@@ -78,7 +78,8 @@ class Teacher(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=255, verbose_name='name')
-    teachers = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teachers')
+    teachers = models.ManyToManyField(Teacher, verbose_name='teachers')
+    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'subject'
@@ -90,6 +91,7 @@ class Subject(models.Model):
 
 class Office(models.Model):
     name = models.CharField(max_length=255, verbose_name='name')
+    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'office'
@@ -107,6 +109,8 @@ class Lesson(models.Model):
     start = models.TimeField(verbose_name='start')
     end = models.TimeField(verbose_name='end')
     day = models.ForeignKey(Day, on_delete=models.CASCADE, verbose_name='day')
+
+    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'lesson'
