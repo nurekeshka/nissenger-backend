@@ -105,6 +105,7 @@ class Lesson(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='subject')
     office = models.ForeignKey(Office, on_delete=models.CASCADE, verbose_name='office')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teacher')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='group')
 
     start = models.TimeField(verbose_name='start')
     end = models.TimeField(verbose_name='end')
@@ -117,4 +118,4 @@ class Lesson(models.Model):
         verbose_name_plural = 'lessons'
     
     def __str__(self):
-        return self.subject
+        return self.subject.name

@@ -17,34 +17,34 @@ class DayAdmin(admin.ModelAdmin):
 @admin.register(Class)
 class ClassAdmin(admin.ModelAdmin):
     list_display = ('grade', 'letter', 'timetable')
-    fields = ('grade', 'letter')
+    fields = ('grade', 'letter', 'timetable')
 
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
-    fields = ('name', 'classes')
+    fields = ('name', 'classes', 'timetable')
 
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
-    fields = ('name',)
+    fields = ('name', 'timetable')
 
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
-    fields = ('name', 'teachers')
+    fields = ('name', 'teachers', 'timetable')
 
 
 @admin.register(Office)
 class OfficeAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
-    fields = ('name',)
+    fields = ('name', 'timetable')
 
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'office', 'day', 'start', 'end', 'timetable')
-    fields = ('subject', 'office', 'day', 'start', 'end')
+    list_display = ('subject', 'office', 'teacher', 'day', 'start', 'end', 'timetable')
+    fields = ('subject', 'office', 'teacher', 'day', 'start', 'end', 'timetable')
