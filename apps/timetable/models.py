@@ -13,7 +13,7 @@ class Timetable(models.Model):
         verbose_name_plural = 'timetables'
     
     def __str__(self):
-        return self.id
+        return str(self.publication_date)
 
 
 class Day(models.Model):
