@@ -1,9 +1,10 @@
 from rest_framework.test import APITestCase
+from apps.timetable.models import *
 from rest_framework import status
 from django.urls import reverse
-from .models import *
 
 
 class ClassTestCase(APITestCase):
     def test_model_valid(self):
-        pass
+        for n in range(7, 13):
+            cl = Class.objects.create(grade=n, letter='A')
