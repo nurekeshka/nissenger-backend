@@ -42,3 +42,9 @@ class SubjectAdmin(admin.ModelAdmin):
 class OfficeAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
     fields = ('name',)
+
+
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ('subject', 'office', 'day', 'start', 'end', 'timetable')
+    fields = ('subject', 'office', 'day', 'start', 'end')
