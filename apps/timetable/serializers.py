@@ -24,3 +24,9 @@ class GroupSerializer(ModelSerializer):
     class Meta:
         model = models.Group
         fields = ('id', 'name', 'classes', 'timetable')
+
+
+class TeacherSerializer(ModelSerializer):
+    class Meta:
+        model = models.Teacher
+        fields = ('id', 'name', 'timetable')
