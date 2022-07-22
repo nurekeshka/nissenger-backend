@@ -36,3 +36,9 @@ class SubjectSerializer(ModelSerializer):
     class Meta:
         model = models.Subject
         fields = ('id', 'name', 'teachers', 'timetable')
+
+
+class Office(ModelSerializer):
+    class Meta:
+        model = models.Office
+        fields = ('id', 'name', 'timetable')
