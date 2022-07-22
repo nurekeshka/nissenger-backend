@@ -12,3 +12,9 @@ class DaySerializer(ModelSerializer):
     class Meta:
         model = models.Day
         fields = ('id', 'name')
+
+
+class ClassSerializer(ModelSerializer):
+    class Meta:
+        model = models.Class
+        fields = ('id', 'grade', 'letter', 'timetable')
