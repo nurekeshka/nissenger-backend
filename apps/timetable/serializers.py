@@ -30,3 +30,9 @@ class TeacherSerializer(ModelSerializer):
     class Meta:
         model = models.Teacher
         fields = ('id', 'name', 'timetable')
+
+
+class SubjectSerializer(ModelSerializer):
+    class Meta:
+        model = models.Subject
+        fields = ('id', 'name', 'teachers', 'timetable')
