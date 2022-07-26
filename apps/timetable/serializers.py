@@ -47,4 +47,5 @@ class Office(ModelSerializer):
 class Lesson(ModelSerializer):
     class Meta:
         model = models.Lesson
-        fields = ('id', 'subject', 'office', 'teacher', 'group', 'start', 'end', 'day', 'timetable')
+        fields = ('id', 'subject', 'office', 'teacher',
+                  'group', 'start', 'end', 'day', 'timetable')
