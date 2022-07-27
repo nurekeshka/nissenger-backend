@@ -27,8 +27,18 @@ def load_subjects(subjects: list, timetable: models.Timetable):
         models.Subject.objects.create( name=name, timetable=timetable )
 
 
+def load_offices(offices: list, timetable: models.Timetable):
+    change = const.OFFICE_CHANGES
+    changes = const.OFFICE_CHANGES.keys()
+
+    for office in offices:
+        name = change[ office['short'] ] if office['short'] in changes else office['short']
+        models.Office.objects.create( name=name, timetable=timetable )
+
+
 def load_entities(tables: dict) -> dict:
     timetable = models.Timetable.objects.create()
 
     load_teachers(tables[indexes.teachers.value]['data_rows'], timetable)
     load_subjects(tables[indexes.subjects.value]['data_rows'], timetable)
+    load_offices(tables[indexes.classrooms.value]['data_rows'], timetable)
