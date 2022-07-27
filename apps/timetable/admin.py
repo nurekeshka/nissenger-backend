@@ -18,6 +18,7 @@ class TimetableAdmin(admin.ModelAdmin):
             timetable.activate()
             self.message_user(request, 'Расписание успешно опубликовано', level=messages.SUCCESS)
 
+
 @admin.register(Day)
 class DayAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
