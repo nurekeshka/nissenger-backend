@@ -143,3 +143,4 @@ REST_FRAMEWORK = {
 
 # STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+TELEGRAM = config.get('TOKENS', 'TELEGRAM')
