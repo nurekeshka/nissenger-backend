@@ -19,6 +19,7 @@ class ClassAdmin(admin.ModelAdmin):
     list_display = ('grade', 'letter', 'timetable')
     fields = ('grade', 'letter', 'timetable')
     list_filter = ('timetable__id',)
+    search_fields = ('grade', 'letter')
 
 
 @admin.register(Group)
