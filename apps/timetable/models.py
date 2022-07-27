@@ -1,7 +1,6 @@
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 from .exceptions import validate_class_letter
-from datetime import datetime
 from django.db import models
 
 
