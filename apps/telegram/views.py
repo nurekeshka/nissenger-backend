@@ -6,4 +6,4 @@ from . import utils
 
 @bot.message_handler(commands=['start'])
 def start_command(message: types.Message):
-    utils.reply(message, Messages.start_command.value)
+    utils.reply(message, '\n\n'.join(Messages.start_command.value))
