@@ -35,7 +35,7 @@ class TeacherAdmin(admin.ModelAdmin):
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
-    fields = ('name', 'teachers', 'timetable')
+    fields = ('name', 'timetable')
 
 
 @admin.register(Office)
@@ -44,7 +44,13 @@ class OfficeAdmin(admin.ModelAdmin):
     fields = ('name', 'timetable')
 
 
+@admin.register(Period)
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('number', 'start', 'end')
+    fields = ('number', 'start', 'end')
+
+
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'office', 'teacher', 'group', 'day', 'start', 'end', 'timetable')
-    fields = ('subject', 'office', 'teacher', 'group', 'day', 'start', 'end', 'timetable')
+    list_display = ('subject', 'office', 'teacher', 'group', 'day', 'period', 'timetable')
+    fields = ('subject', 'office', 'teacher', 'group', 'day', 'period', 'timetable')
