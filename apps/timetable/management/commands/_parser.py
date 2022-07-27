@@ -46,7 +46,11 @@ def load_classes(class_names: list, timetable: models.Timetable):
         grade = int(class_name['short'][:-1])
         letter = class_name['short'][-1]
 
-        models.Class.objects.create( grade=grade, letter=letter, timetable=timetable )
+        entity = models.Class.objects.create( grade=grade, letter=letter, timetable=timetable )
+
+        for number in range(1, 3):
+            group = models.Group.objects.create(name=f'{number} - группа: {entity}', timetable=timetable)
+            group.classes.add(entity)
 
 
 def load_entities(tables: dict) -> dict:
