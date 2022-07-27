@@ -54,4 +54,4 @@ class LessonSerializer(ModelSerializer):
 class PeriodSerializer(ModelSerializer):
     class Meta:
         model = models.Period
-        fields = ('number', 'start', 'end')
+        fields = ('number', 'start', 'end', 'timetable')
