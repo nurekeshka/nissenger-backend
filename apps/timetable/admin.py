@@ -1,12 +1,22 @@
+from django.contrib import messages
 from django.contrib import admin
 from .models import *
 
 
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('id', 'download_date', 'publication_date')
+    list_display = ('id', 'download_date', 'publication_date', 'active')
     fields = ('publication_date',)
+    actions = ('activate',)
 
+    @admin.action(description='Опубликовать')
+    def activate(self, request, queryset):
+        if len(queryset) != 1:
+            self.message_user(request, 'Можно опубликовать только одну версию расписания', level=messages.ERROR)
+        else:
+            timetable = queryset[0]
+            timetable.activate()
+            self.message_user(request, 'Расписание успешно опубликовано', level=messages.SUCCESS)
 
 @admin.register(Day)
 class DayAdmin(admin.ModelAdmin):
