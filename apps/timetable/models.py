@@ -14,7 +14,7 @@ class Timetable(models.Model):
         verbose_name_plural = 'timetables'
     
     def __str__(self):
-        return str(self.publication_date) if self.publication_date is not None else str(self.download_date)
+        return str(self.publication_date) if self.publication_date is not None else str(self.id)
 
 
 class Day(models.Model):
@@ -113,7 +113,7 @@ class Period(models.Model):
         verbose_name_plural = 'periods'
     
     def __str__(self):
-        return self.number
+        return ' - '.join((self.start.strftime('%H:%M'), self.end.strftime('%H:%M')))
 
 
 class Lesson(models.Model):
