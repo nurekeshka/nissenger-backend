@@ -5,8 +5,7 @@ from .models import *
 
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('id', 'download_date', 'publication_date', 'active')
-    fields = ('publication_date',)
+    list_display = ('id', 'download_date', 'active')
     actions = ('activate',)
 
     @admin.action(description='Опубликовать')
