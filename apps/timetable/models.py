@@ -6,7 +6,6 @@ from django.db import models
 
 class Timetable(models.Model):
     download_date = models.DateTimeField(auto_now_add=True, verbose_name='download date')
-    publication_date = models.DateTimeField(null=True, blank=True, verbose_name='publication date')
     active = models.BooleanField(default=False, verbose_name='active')
 
     class Meta:
@@ -14,7 +13,7 @@ class Timetable(models.Model):
         verbose_name_plural = 'timetables'
     
     def __str__(self):
-        return str(self.publication_date) if self.publication_date is not None else str(self.id)
+        return str(self.download_date)
     
     def activate(self):
         for timetable in Timetable.objects.all():
