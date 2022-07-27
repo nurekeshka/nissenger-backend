@@ -90,3 +90,13 @@ OFFICE_CHANGES = {
     'МСЗ': 'Малый Спорт Зал',
     'СЗ': 'Спорт Зал'
 }
+
+DAYS = (
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday'
+)
