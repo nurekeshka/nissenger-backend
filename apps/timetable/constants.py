@@ -26,10 +26,6 @@ TIMETABLE_DATABASE_DATA = {
                     "period",
                     "starttime",
                     "endtime"
-                ],
-                "dayparts": [
-                    "starttime",
-                    "endtime"
                 ]
             },
             "needed_combos": {}
@@ -45,7 +41,6 @@ class TimetableIndexes(Enum):
     classrooms = 2
     classes = 3
     periods = 4
-    dayparts = 5
 
 
 TEACHER_CHANGES = {
