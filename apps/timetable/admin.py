@@ -52,8 +52,8 @@ class OfficeAdmin(admin.ModelAdmin):
 
 @admin.register(Period)
 class PeriodAdmin(admin.ModelAdmin):
-    list_display = ('number', 'start', 'end')
-    fields = ('number', 'start', 'end')
+    list_display = ('number', 'start', 'end', 'timetable')
+    fields = ('number', 'start', 'end', 'timetable')
     list_filter = ('timetable__id',)
 
 
@@ -61,4 +61,5 @@ class PeriodAdmin(admin.ModelAdmin):
 class LessonAdmin(admin.ModelAdmin):
     list_display = ('subject', 'office', 'teacher', 'group', 'day', 'period', 'timetable')
     fields = ('subject', 'office', 'teacher', 'group', 'day', 'period', 'timetable')
+    search_fields = ('subject', 'office', 'teacher', 'group', 'day', 'period')
     list_filter = ('timetable__id',)
