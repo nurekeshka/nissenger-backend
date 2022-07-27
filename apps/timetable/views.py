@@ -10,3 +10,8 @@ class TeacherList(generics.ListAPIView):
 class ClassList(generics.ListAPIView):
     queryset = models.Class.objects.filter(timetable__active=True)
     serializer_class = serializers.ClassSerializer
+
+
+class PeriodList(generics.ListAPIView):
+    queryset = models.Period.objects.filter(timetable__active=True)
+    serializer_class = serializers.PeriodSerializer
