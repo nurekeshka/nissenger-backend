@@ -38,14 +38,20 @@ class SubjectSerializer(ModelSerializer):
         fields = ('id', 'name', 'teachers', 'timetable')
 
 
-class Office(ModelSerializer):
+class OfficeSerializer(ModelSerializer):
     class Meta:
         model = models.Office
         fields = ('id', 'name', 'timetable')
 
 
-class Lesson(ModelSerializer):
+class LessonSerializer(ModelSerializer):
     class Meta:
         model = models.Lesson
         fields = ('id', 'subject', 'office', 'teacher',
-                  'group', 'start', 'end', 'day', 'timetable')
+                  'group', 'period', 'day', 'timetable')
+
+
+class PeriodSerializer(ModelSerializer):
+    class Meta:
+        model = models.Period
+        fields = ('number', 'start', 'end')
