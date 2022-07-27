@@ -6,7 +6,7 @@ from django.db import models
 
 
 class Timetable(models.Model):
-    download_date = models.DateTimeField(default=datetime.now, verbose_name='download date')
+    download_date = models.DateTimeField(auto_now_add=True, verbose_name='download date')
     publication_date = models.DateTimeField(null=True, blank=True, verbose_name='publication date')
 
     class Meta:
