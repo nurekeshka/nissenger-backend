@@ -1,12 +1,13 @@
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 from .exceptions import validate_class_letter
+from datetime import datetime
 from django.db import models
 
 
 class Timetable(models.Model):
-    download_date = models.DateTimeField(auto_now_add=True, verbose_name='download date')
-    publication_date = models.DateTimeField(default='', null=True, blank=True, verbose_name='publication date')
+    download_date = models.DateTimeField(default=datetime.now, verbose_name='download date')
+    publication_date = models.DateTimeField(null=True, blank=True, verbose_name='publication date')
 
     class Meta:
         verbose_name = 'timetable'
@@ -78,7 +79,6 @@ class Teacher(models.Model):
 
 class Subject(models.Model):
     name = models.CharField(max_length=255, verbose_name='name')
-    teachers = models.ManyToManyField(Teacher, verbose_name='teachers')
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
@@ -101,14 +101,27 @@ class Office(models.Model):
         return self.name
 
 
+class Period(models.Model):
+    number = models.IntegerField(verbose_name='number')
+    start = models.TimeField(verbose_name='start')
+    end = models.TimeField(verbose_name='end')
+
+    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'period'
+        verbose_name_plural = 'periods'
+    
+    def __str__(self):
+        return self.number
+
+
 class Lesson(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='subject')
     office = models.ForeignKey(Office, on_delete=models.CASCADE, verbose_name='office')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teacher')
+    period = models.ForeignKey(Period, on_delete=models.CASCADE, verbose_name='period')
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='group')
-
-    start = models.TimeField(verbose_name='start')
-    end = models.TimeField(verbose_name='end')
     day = models.ForeignKey(Day, on_delete=models.CASCADE, verbose_name='day')
 
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
