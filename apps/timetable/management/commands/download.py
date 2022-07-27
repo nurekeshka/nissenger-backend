@@ -9,4 +9,5 @@ class Command(BaseCommand):
         parser.add_argument('domain', type=str)
 
     def handle(self, *args, **kwargs):
-        response = parser.load_main_db(kwargs['domain'])
+        data = parser.load_main_db(kwargs['domain'])
+        parser.load_entities(data['r']['tables'])
