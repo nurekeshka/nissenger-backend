@@ -7,6 +7,7 @@ class TeacherList(generics.ListAPIView):
     queryset = models.Teacher.objects.filter(timetable__active=True)
     serializer_class = serializers.TeacherSerializer
 
+
 class ClassList(generics.ListAPIView):
     queryset = models.Class.objects.filter(timetable__active=True)
     serializer_class = serializers.ClassSerializer
@@ -15,3 +16,8 @@ class ClassList(generics.ListAPIView):
 class PeriodList(generics.ListAPIView):
     queryset = models.Period.objects.filter(timetable__active=True)
     serializer_class = serializers.PeriodSerializer
+
+
+class OfficeList(generics.ListAPIView):
+    queryset = models.Office.objects.filter(timetable__active=True)
+    serializer_class = serializers.OfficeSerializer
