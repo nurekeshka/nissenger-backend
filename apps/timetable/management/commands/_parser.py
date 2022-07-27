@@ -41,6 +41,14 @@ def load_periods(periods: list, timetable: models.Timetable):
         models.Period.objects.create( number=period['period'], start=period['starttime'], end=period['endtime'], timetable=timetable )
 
 
+def load_classes(class_names: list, timetable: models.Timetable):
+    for class_name in class_names:
+        grade = int(class_name['short'][:-1])
+        letter = class_name['short'][-1]
+
+        models.Class.objects.create( grade=grade, letter=letter, timetable=timetable )
+
+
 def load_entities(tables: dict) -> dict:
     timetable = models.Timetable.objects.create()
 
@@ -48,3 +56,4 @@ def load_entities(tables: dict) -> dict:
     load_subjects( tables[indexes.subjects.value]['data_rows'], timetable )
     load_offices( tables[indexes.classrooms.value]['data_rows'], timetable )
     load_periods( tables[indexes.periods.value]['data_rows'], timetable )
+    load_classes( tables[indexes.classes.value]['data_rows'], timetable )
