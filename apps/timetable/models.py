@@ -2,11 +2,14 @@ from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 from .exceptions import validate_class_letter
 from django.db import models
+from datetime import datetime
+from datetime import time
+from typing import Set
 
 
 class Timetable(models.Model):
-    download_date = models.DateTimeField(auto_now_add=True, verbose_name='download date')
-    active = models.BooleanField(default=False, verbose_name='active')
+    download_date: datetime = models.DateTimeField(auto_now_add=True, verbose_name='download date')
+    active: bool = models.BooleanField(default=False, verbose_name='active')
 
     class Meta:
         verbose_name = 'timetable'
@@ -28,7 +31,7 @@ class Timetable(models.Model):
 
 
 class Day(models.Model):
-    name = models.CharField(verbose_name='name',
+    name: str = models.CharField(verbose_name='name',
                             max_length=15, blank=False, null=False)
 
     class Meta:
@@ -40,19 +43,19 @@ class Day(models.Model):
 
 
 class Class(models.Model):
-    grade = models.IntegerField(verbose_name='grade', blank=False, 
+    grade: int = models.IntegerField(verbose_name='grade', blank=False, 
         null=False, validators=[
             MaxValueValidator(limit_value=12),
             MinValueValidator(limit_value=7),
         ]
     )
-    letter = models.CharField(verbose_name='letter', max_length=1, 
+    letter: str = models.CharField(verbose_name='letter', max_length=1, 
         blank=False, null=False, validators=[
             validate_class_letter
         ]
     )
 
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'class'
@@ -63,9 +66,9 @@ class Class(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=255, verbose_name='name')
-    classes = models.ManyToManyField(Class, verbose_name='classes')
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    name: str = models.CharField(max_length=255, verbose_name='name')
+    classes: Set[Class] = models.ManyToManyField(Class, verbose_name='classes')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'group'
@@ -76,8 +79,8 @@ class Group(models.Model):
 
 
 class Teacher(models.Model):
-    name = models.CharField(max_length=255, verbose_name='name')
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    name: str = models.CharField(max_length=255, verbose_name='name')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'teacher'
@@ -88,8 +91,8 @@ class Teacher(models.Model):
 
 
 class Subject(models.Model):
-    name = models.CharField(max_length=255, verbose_name='name')
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    name: str = models.CharField(max_length=255, verbose_name='name')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'subject'
@@ -100,8 +103,8 @@ class Subject(models.Model):
 
 
 class Office(models.Model):
-    name = models.CharField(max_length=255, verbose_name='name')
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    name: str = models.CharField(max_length=255, verbose_name='name')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'office'
@@ -112,11 +115,11 @@ class Office(models.Model):
 
 
 class Period(models.Model):
-    number = models.IntegerField(verbose_name='number')
-    start = models.TimeField(verbose_name='start')
-    end = models.TimeField(verbose_name='end')
+    number: int = models.IntegerField(verbose_name='number')
+    start: time = models.TimeField(verbose_name='start')
+    end: time = models.TimeField(verbose_name='end')
 
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'period'
@@ -127,14 +130,14 @@ class Period(models.Model):
 
 
 class Lesson(models.Model):
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='subject')
-    office = models.ForeignKey(Office, on_delete=models.CASCADE, verbose_name='office')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teacher')
-    period = models.ForeignKey(Period, on_delete=models.CASCADE, verbose_name='period')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='group')
-    day = models.ForeignKey(Day, on_delete=models.CASCADE, verbose_name='day')
+    subject: Subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='subject')
+    office: Office = models.ForeignKey(Office, on_delete=models.CASCADE, verbose_name='office')
+    teacher: Teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='teacher')
+    period: Period = models.ForeignKey(Period, on_delete=models.CASCADE, verbose_name='period')
+    group: Group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='group')
+    day: Day = models.ForeignKey(Day, on_delete=models.CASCADE, verbose_name='day')
 
-    timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+    timetable: Timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'lesson'
