@@ -1,3 +1,4 @@
+from apps.timetable.utils import get_current_year
 from enum import Enum
 
 
@@ -5,7 +6,7 @@ TIMETABLE_DATABASE_LINK = 'https://{}.edupage.org/rpr/server/maindbi.js?__func=m
 TIMETABLE_DATABASE_DATA = {
     "__args": [
         None,
-        2021,
+        get_current_year(),
         {},
         {
             "op": "fetch",
@@ -29,6 +30,20 @@ TIMETABLE_DATABASE_DATA = {
                 ]
             },
             "needed_combos": {}
+        }
+    ],
+    "__gsh": "00000000"
+}
+CLASS_LESSONS_LINK = 'https://{}.edupage.org/timetable/server/currenttt.js?__func=curentttGetData'
+CLASS_LESSONS_DATA = {
+    "__args": [
+        None,
+        {
+            "year": get_current_year(),
+            "datefrom": '',
+            "dateto": '',
+            "table": "classes",
+            "id": '',
         }
     ],
     "__gsh": "00000000"
