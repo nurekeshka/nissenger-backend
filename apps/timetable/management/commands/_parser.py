@@ -1,5 +1,5 @@
-from ...constants import TimetableIndexes as indexes
-from ... import constants as const
+from apps.timetable.constants import TimetableIndexes as indexes
+from apps.timetable import constants as const
 from apps.timetable import models
 import requests
 
