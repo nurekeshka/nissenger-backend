@@ -89,3 +89,16 @@ class Period(models.Model):
 
     def __str__(self):
         return ' - '.join((self.starttime.strftime('%H:%M'), self.endtime.strftime('%H:%M')))
+
+
+class Classroom(models.Model):
+    name = models.CharField(max_length=25, verbose_name='name')
+    timetable = models.ForeignKey(
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'classroom'
+        verbose_name_plural = 'classrooms'
+
+    def __str__(self):
+        return self.name
