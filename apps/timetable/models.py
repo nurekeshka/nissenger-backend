@@ -37,3 +37,16 @@ class Timetable(models.Model):
 
     def __str__(self):
         return self.downloaded.strftime('%Y-%m-%d %H:%M:%S')
+
+
+class Subject(models.Model):
+    name = models.CharField(max_length=50)
+    timetable = models.ForeignKey(
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'subject'
+        verbose_name_plural = 'subjects'
+
+    def __str__(self):
+        return self.name
