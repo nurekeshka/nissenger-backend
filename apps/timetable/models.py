@@ -40,7 +40,7 @@ class Timetable(models.Model):
 
 
 class Subject(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name='name')
     timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
@@ -53,7 +53,7 @@ class Subject(models.Model):
 
 
 class Teacher(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name='name')
     timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
