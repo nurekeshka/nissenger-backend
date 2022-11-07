@@ -50,3 +50,16 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Teacher(models.Model):
+    name = models.CharField(max_length=50)
+    timetable = models.ForeignKey(
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'teacher'
+        verbose_name_plural = 'teachers'
+
+    def __str__(self):
+        return self.name
