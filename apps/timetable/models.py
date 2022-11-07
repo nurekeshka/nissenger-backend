@@ -116,3 +116,16 @@ class Class(models.Model):
 
     def __str__(self):
         return f'{self.grade}{self.letter}'
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=25, verbose_name='name')
+    classes = models.ManyToManyField(Class, verbose_name='classes')
+    timetable = models.ForeignKey(Timetable, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'group'
+        verbose_name_plural = 'groups'
+
+    def __str__(self):
+        return self.name
