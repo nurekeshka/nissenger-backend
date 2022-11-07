@@ -1,8 +1,10 @@
+from datetime import datetime, time
+from typing import Set
 from django.db import models
 
 
 class City(models.Model):
-    name = models.CharField(max_length=50, verbose_name='name')
+    name: str = models.CharField(max_length=50, verbose_name='name')
 
     class Meta:
         verbose_name = 'city'
@@ -13,8 +15,8 @@ class City(models.Model):
 
 
 class School(models.Model):
-    name = models.CharField(max_length=50, verbose_name='name')
-    city = models.ForeignKey(
+    name: str = models.CharField(max_length=50, verbose_name='name')
+    city: City = models.ForeignKey(
         City, on_delete=models.CASCADE, verbose_name='city')
 
     class Meta:
@@ -26,9 +28,9 @@ class School(models.Model):
 
 
 class Timetable(models.Model):
-    downloaded = models.DateTimeField(
+    downloaded: datetime = models.DateTimeField(
         auto_now_add=True, blank=True, verbose_name='downloaded')
-    school = models.ForeignKey(
+    school: School = models.ForeignKey(
         School, on_delete=models.CASCADE, verbose_name='school')
 
     class Meta:
@@ -40,8 +42,8 @@ class Timetable(models.Model):
 
 
 class Subject(models.Model):
-    name = models.CharField(max_length=50, verbose_name='name')
-    timetable = models.ForeignKey(
+    name: str = models.CharField(max_length=50, verbose_name='name')
+    timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
@@ -53,8 +55,8 @@ class Subject(models.Model):
 
 
 class Teacher(models.Model):
-    name = models.CharField(max_length=50, verbose_name='name')
-    timetable = models.ForeignKey(
+    name: str = models.CharField(max_length=50, verbose_name='name')
+    timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
@@ -66,7 +68,7 @@ class Teacher(models.Model):
 
 
 class Day(models.Model):
-    name = models.CharField(max_length=25, verbose_name='name')
+    name: str = models.CharField(max_length=25, verbose_name='name')
 
     class Meta:
         verbose_name = 'day'
@@ -77,10 +79,10 @@ class Day(models.Model):
 
 
 class Period(models.Model):
-    starttime = models.TimeField(verbose_name='start time')
-    endtime = models.TimeField(verbose_name='end time')
-    number = models.IntegerField(verbose_name='number')
-    timetable = models.ForeignKey(
+    starttime: time = models.TimeField(verbose_name='start time')
+    endtime: time = models.TimeField(verbose_name='end time')
+    number: int = models.IntegerField(verbose_name='number')
+    timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
@@ -92,8 +94,8 @@ class Period(models.Model):
 
 
 class Classroom(models.Model):
-    name = models.CharField(max_length=25, verbose_name='name')
-    timetable = models.ForeignKey(
+    name: str = models.CharField(max_length=25, verbose_name='name')
+    timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
@@ -105,9 +107,9 @@ class Classroom(models.Model):
 
 
 class Class(models.Model):
-    grade = models.IntegerField(verbose_name='grade')
-    letter = models.CharField(max_length=1, verbose_name='letter')
-    timetable = models.ForeignKey(
+    grade: int = models.IntegerField(verbose_name='grade')
+    letter: str = models.CharField(max_length=1, verbose_name='letter')
+    timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
@@ -119,9 +121,10 @@ class Class(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=25, verbose_name='name')
-    classes = models.ManyToManyField(Class, verbose_name='classes')
-    timetable = models.ForeignKey(Timetable, verbose_name='timetable')
+    name: str = models.CharField(max_length=25, verbose_name='name')
+    classes: Set[Class] = models.ManyToManyField(Class, verbose_name='classes')
+    timetable: Timetable = models.ForeignKey(
+        Timetable, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'group'
