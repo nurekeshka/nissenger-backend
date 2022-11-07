@@ -102,3 +102,17 @@ class Classroom(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Class(models.Model):
+    grade = models.IntegerField(verbose_name='grade')
+    letter = models.CharField(max_length=1, verbose_name='letter')
+    timetable = models.ForeignKey(
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'class'
+        verbose_name_plural = 'classes'
+
+    def __str__(self):
+        return f'{self.grade}{self.letter}'
