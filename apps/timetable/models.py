@@ -80,10 +80,12 @@ class Period(models.Model):
     starttime = models.TimeField(verbose_name='start time')
     endtime = models.TimeField(verbose_name='end time')
     number = models.IntegerField(verbose_name='number')
+    timetable = models.ForeignKey(
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'period'
         verbose_name_plural = 'periods'
-    
+
     def __str__(self):
         return ' - '.join((self.starttime.strftime('%H:%M'), self.endtime.strftime('%H:%M')))
