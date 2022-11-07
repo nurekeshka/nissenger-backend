@@ -129,3 +129,28 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Lesson(models.Model):
+    subject: Subject = models.ForeignKey(
+        Subject, on_delete=models.CASCADE, verbose_name='subject')
+    classroom: Classroom = models.ForeignKey(
+        Classroom, on_delete=models.CASCADE, verbose_name='classroom')
+    teacher: Teacher = models.ForeignKey(
+        Teacher, on_delete=models.CASCADE, verbose_name='teacher')
+    period: Period = models.ForeignKey(
+        Period, on_delete=models.CASCADE, verbose_name='period')
+    group: Group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, verbose_name='group')
+    day: Day = models.ForeignKey(
+        Day, on_delete=models.CASCADE, verbose_name='day')
+
+    timetable: Timetable = models.ForeignKey(
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
+
+    class Meta:
+        verbose_name = 'lesson'
+        verbose_name_plural = 'lessons'
+
+    def __str__(self):
+        return self.subject.name
