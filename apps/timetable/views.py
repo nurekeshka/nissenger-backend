@@ -1,4 +1,6 @@
+from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework import views
 from . import serializers
 from . import models
 
@@ -18,6 +20,11 @@ class PeriodList(generics.ListAPIView):
     serializer_class = serializers.PeriodSerializer
 
 
-class OfficeList(generics.ListAPIView):
-    queryset = models.Office.objects.filter(timetable__active=True)
-    serializer_class = serializers.OfficeSerializer
+class ClassroomList(generics.ListAPIView):
+    queryset = models.Classroom.objects.filter(timetable__active=True)
+    serializer_class = serializers.ClassroomSerializer
+
+
+class TimetableLoadView(views.APIView):
+    def post(self, request, *args, **kwargs):
+        timetable = models.Timetable.objects.create()

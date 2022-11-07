@@ -11,11 +11,13 @@ class TimetableAdmin(admin.ModelAdmin):
     @admin.action(description='Опубликовать')
     def activate(self, request, queryset):
         if len(queryset) != 1:
-            self.message_user(request, 'Можно опубликовать только одну версию расписания', level=messages.ERROR)
+            self.message_user(
+                request, 'Можно опубликовать только одну версию расписания', level=messages.ERROR)
         else:
             timetable = queryset[0]
             timetable.activate()
-            self.message_user(request, 'Расписание успешно опубликовано', level=messages.SUCCESS)
+            self.message_user(
+                request, 'Расписание успешно опубликовано', level=messages.SUCCESS)
 
 
 @admin.register(Day)
@@ -54,8 +56,8 @@ class SubjectAdmin(admin.ModelAdmin):
     list_filter = ('timetable__id',)
 
 
-@admin.register(Office)
-class OfficeAdmin(admin.ModelAdmin):
+@admin.register(Classroom)
+class ClassroomAdmin(admin.ModelAdmin):
     list_display = ('name', 'timetable')
     fields = ('name', 'timetable')
     list_filter = ('timetable__id',)
@@ -70,7 +72,10 @@ class PeriodAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'office', 'teacher', 'group', 'day', 'period', 'timetable')
-    fields = ('subject', 'office', 'teacher', 'group', 'day', 'period', 'timetable')
-    search_fields = ('subject', 'office', 'teacher', 'group', 'day', 'period')
+    list_display = ('subject', 'classroom', 'teacher',
+                    'group', 'day', 'period', 'timetable')
+    fields = ('subject', 'classroom', 'teacher',
+              'group', 'day', 'period', 'timetable')
+    search_fields = ('subject', 'classroom', 'teacher',
+                     'group', 'day', 'period')
     list_filter = ('timetable__id',)
