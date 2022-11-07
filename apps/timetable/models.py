@@ -63,3 +63,14 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Day(models.Model):
+    name = models.CharField(max_length=25, verbose_name='name')
+
+    class Meta:
+        verbose_name = 'day'
+        verbose_name_plural = 'days'
+
+    def __str__(self):
+        return self.name
