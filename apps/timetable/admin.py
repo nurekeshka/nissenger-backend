@@ -3,6 +3,12 @@ from django.contrib import admin
 from .models import *
 
 
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    fields = ('name')
+
+
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
     list_display = ('id', 'downloaded', 'active')
