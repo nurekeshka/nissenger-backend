@@ -32,6 +32,7 @@ class Timetable(models.Model):
         auto_now_add=True, blank=True, verbose_name='downloaded')
     school: School = models.ForeignKey(
         School, on_delete=models.CASCADE, verbose_name='school')
+    active: bool = models.BooleanField(default=False, verbose_name='active')
 
     class Meta:
         verbose_name = 'timetable'
