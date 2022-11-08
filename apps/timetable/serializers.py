@@ -5,7 +5,7 @@ from . import models
 class TimetableSerializer(ModelSerializer):
     class Meta:
         model = models.Timetable
-        fields = ('id', 'download_date', 'publication_date')
+        fields = ('id', 'downloaded', 'school')
 
 
 class DaySerializer(ModelSerializer):
@@ -35,7 +35,7 @@ class TeacherSerializer(ModelSerializer):
 class SubjectSerializer(ModelSerializer):
     class Meta:
         model = models.Subject
-        fields = ('id', 'name', 'teachers', 'timetable')
+        fields = ('id', 'name', 'timetable')
 
 
 class ClassroomSerializer(ModelSerializer):
@@ -54,4 +54,4 @@ class LessonSerializer(ModelSerializer):
 class PeriodSerializer(ModelSerializer):
     class Meta:
         model = models.Period
-        fields = ('number', 'start', 'end', 'timetable')
+        fields = ('number', 'starttime', 'endtime', 'timetable')
