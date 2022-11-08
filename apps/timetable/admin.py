@@ -9,6 +9,12 @@ class CityAdmin(admin.ModelAdmin):
     fields = ('name')
 
 
+@admin.register(School)
+class SchoolAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'city')
+    fields = ('name', 'city')
+
+
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
     list_display = ('id', 'downloaded', 'active')
