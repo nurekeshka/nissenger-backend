@@ -6,7 +6,7 @@ from .models import *
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
-    fields = ('name')
+    fields = ('name',)
 
 
 @admin.register(School)
