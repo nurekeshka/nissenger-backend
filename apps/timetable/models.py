@@ -125,7 +125,7 @@ class Group(models.Model):
     name: str = models.CharField(max_length=25, verbose_name='name')
     classes: Set[Class] = models.ManyToManyField(Class, verbose_name='classes')
     timetable: Timetable = models.ForeignKey(
-        Timetable, verbose_name='timetable')
+        Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
     class Meta:
         verbose_name = 'group'
