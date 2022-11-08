@@ -5,7 +5,7 @@ from .models import *
 
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('id', 'download_date', 'active')
+    list_display = ('id', 'downloaded', 'active')
     actions = ('activate',)
 
     @admin.action(description='Опубликовать')
@@ -28,7 +28,7 @@ class DayAdmin(admin.ModelAdmin):
 
 @admin.register(Class)
 class ClassAdmin(admin.ModelAdmin):
-    list_display = ('grade', 'letter', 'timetable')
+    list_display = ('id', 'grade', 'letter', 'timetable')
     fields = ('grade', 'letter', 'timetable')
     list_filter = ('timetable__id',)
     search_fields = ('grade', 'letter')
@@ -36,14 +36,14 @@ class ClassAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'timetable')
+    list_display = ('id', 'name', 'timetable')
     fields = ('name', 'classes', 'timetable')
     list_filter = ('timetable__id',)
 
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('name', 'timetable')
+    list_display = ('id', 'name', 'timetable')
     fields = ('name', 'timetable')
     search_fields = ('id', 'name')
     list_filter = ('timetable__id',)
@@ -51,22 +51,22 @@ class TeacherAdmin(admin.ModelAdmin):
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'timetable')
+    list_display = ('id', 'name', 'timetable')
     fields = ('name', 'timetable')
     list_filter = ('timetable__id',)
 
 
 @admin.register(Classroom)
 class ClassroomAdmin(admin.ModelAdmin):
-    list_display = ('name', 'timetable')
+    list_display = ('id', 'name', 'timetable')
     fields = ('name', 'timetable')
     list_filter = ('timetable__id',)
 
 
 @admin.register(Period)
 class PeriodAdmin(admin.ModelAdmin):
-    list_display = ('number', 'start', 'end', 'timetable')
-    fields = ('number', 'start', 'end', 'timetable')
+    list_display = ('id', 'number', 'starttime', 'endtime', 'timetable')
+    fields = ('number', 'starttime', 'endtime', 'timetable')
     list_filter = ('timetable__id',)
 
 
