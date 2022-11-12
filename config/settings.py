@@ -3,7 +3,7 @@ import configparser
 from tkinter import CURRENT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname( os.path.dirname( os.path.abspath( __file__ ) ) )
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -21,7 +21,7 @@ config = configparser.ConfigParser()
 config.read(os.path.join(BASE_DIR, 'settings.ini'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool( config.get( 'SETTINGS', 'DEVELOPMENT' ) )
+DEBUG = bool(config.get('SETTINGS', 'DEVELOPMENT'))
 
 VERSION = 'DEVELOPMENT' if DEBUG else 'PRODUCTION'
 ALLOWED_HOSTS = ["*"]
@@ -135,7 +135,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [ 'rest_framework.authentication.TokenAuthentication' ],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
     'TEST_REQUEST_DEFAULT_FORMAT': 'multipart'
 }
 
