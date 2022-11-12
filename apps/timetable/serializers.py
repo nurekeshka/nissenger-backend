@@ -55,3 +55,9 @@ class PeriodSerializer(ModelSerializer):
     class Meta:
         model = models.Period
         fields = ('number', 'starttime', 'endtime', 'timetable')
+
+
+class SchoolSerializer(ModelSerializer):
+    class Meta:
+        model = models.School
+        fields = ('id', 'name', 'city')
