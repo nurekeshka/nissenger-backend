@@ -41,6 +41,13 @@ class Timetable(models.Model):
     def __str__(self):
         return self.downloaded.strftime('%Y-%m-%d %H:%M:%S')
 
+    def activate(self):
+        for timetable in Timetable.objects.filter(school=self.school):
+            timetable.active = False
+
+        self.active = True
+        self.save()
+
 
 class Subject(models.Model):
     name: str = models.CharField(max_length=50, verbose_name='name')
