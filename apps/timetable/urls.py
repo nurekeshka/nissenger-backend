@@ -6,7 +6,7 @@ urlpatterns = [
     path('periods/', views.PeriodList.as_view(), name='list-periods'),
     path('classrooms/', views.ClassroomList.as_view(), name='list-classrooms'),
     path('classes/', views.ClassList.as_view(), name='list-classes'),
-    path('download', views.TimetableLoadView.as_view(), name='timetable-download'),
+    path('upload', views.TimetableLoadView.as_view(), name='timetable-upload'),
     path('schools/', views.SchoolList.as_view(), name='list-schools'),
     path('schools/<int:pk>/', views.RetrieveSchool.as_view(), name='get-school'),
 ]
