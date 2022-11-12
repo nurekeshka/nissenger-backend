@@ -7,4 +7,5 @@ urlpatterns = [
     path('classrooms/', views.ClassroomList.as_view(), name='list-classrooms'),
     path('classes/', views.ClassList.as_view(), name='list-classes'),
     path('upload/', views.TimetableLoadView.as_view(), name='timetable-load'),
+    path('schools/', views.SchoolList.as_view(), name='list-schools'),
 ]
