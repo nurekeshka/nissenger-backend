@@ -24,7 +24,7 @@ class School(models.Model):
         verbose_name_plural = 'schools'
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {str(self.city)}'
 
 
 class Timetable(models.Model):
