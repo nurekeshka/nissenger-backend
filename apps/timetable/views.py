@@ -1,8 +1,11 @@
+from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import generics
 from rest_framework import views
 from . import serializers
 from . import models
+import io
 
 
 class TeacherList(generics.ListAPIView):
@@ -25,6 +28,11 @@ class ClassroomList(generics.ListAPIView):
     serializer_class = serializers.ClassroomSerializer
 
 
-class TimetableLoadView(views.APIView):
-    def post(self, request, *args, **kwargs):
-        timetable = models.Timetable.objects.create()
+class SchoolList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.School.objects.all()
+    serializer_class = serializers.SchoolSerializer
+
+
+class RetrieveSchool(generics.RetrieveAPIView):
+    queryset = models.School.objects.all()
+    serializer_class = serializers.SchoolSerializer
