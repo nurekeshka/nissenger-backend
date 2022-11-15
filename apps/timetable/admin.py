@@ -17,7 +17,8 @@ class SchoolAdmin(admin.ModelAdmin):
 
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('id', 'downloaded', 'active')
+    list_display = ('id', 'downloaded', 'active', 'school')
+    readonly_fields = ['active']
     actions = ('activate',)
 
     @admin.action(description='Опубликовать')
