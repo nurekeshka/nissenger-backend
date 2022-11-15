@@ -52,6 +52,7 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'timetable')
     fields = ('name', 'classes', 'timetable')
     list_filter = ('timetable__id',)
+    search_fields = ('id', 'name', 'classes__id')
 
 
 @admin.register(Teacher)
