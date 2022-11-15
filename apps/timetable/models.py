@@ -43,9 +43,13 @@ class Timetable(models.Model):
 
     def activate(self):
         for timetable in Timetable.objects.filter(school=self.school):
-            timetable.active = False
+            timetable.deactivate()
 
         self.active = True
+        self.save()
+
+    def deactivate(self):
+        self.active = False
         self.save()
 
 
