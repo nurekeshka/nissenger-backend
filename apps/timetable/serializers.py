@@ -61,3 +61,22 @@ class SchoolSerializer(ModelSerializer):
     class Meta:
         model = models.School
         fields = ('id', 'name', 'city')
+
+
+def parse_lesson(lesson: dict):
+    lesson['subject'] = models.Subject.objects.get(
+        id=lesson['subject']).name
+    lesson['classroom'] = models.Classroom.objects.get(
+        id=lesson['classroom']).name
+    lesson['teacher'] = models.Teacher.objects.get(
+        id=lesson['teacher']).name
+    lesson['period'] = PeriodSerializer(
+        instance=models.Period.objects.get(id=lesson['period'])).data
+
+    lesson['group'] = GroupSerializer(
+        instance=models.Group.objects.get(id=lesson['group'])).data
+
+    lesson['group']['classes'] = [ClassSerializer(
+        instance=models.Class.objects.get(id=__class)).data for __class in lesson['group']['classes']]
+
+    return lesson
