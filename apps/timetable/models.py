@@ -54,7 +54,15 @@ class Timetable(models.Model):
 
 
 class Subject(models.Model):
+    SUBJECT_TYPE_CHOICES = (
+        'FOREIGN LANGUAGE',
+        'CASUAL SUBJECT',
+        'PROFILE DIRECTED',
+        'SAT PREPARATION',
+    )
+
     name: str = models.CharField(max_length=50, verbose_name='name')
+    type = models.CharField(max_length=50, choices=SUBJECT_TYPE_CHOICES, verbose_name='type')
     timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
