@@ -143,7 +143,7 @@ class Group(models.Model):
         verbose_name_plural = 'groups'
 
     def __str__(self):
-        return self.name
+        return f'{self.name}: [{";".join(map(str, self.classes.all()))}]'
 
 
 class Lesson(models.Model):
