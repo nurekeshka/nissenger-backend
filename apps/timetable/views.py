@@ -4,29 +4,27 @@ from rest_framework.request import Request
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import views
+from . import exceptions
 from . import serializers
 from . import models
 import io
 
 
-class TeacherList(generics.ListAPIView):
-    queryset = models.Teacher.objects.filter(timetable__active=True)
-    serializer_class = serializers.TeacherSerializer
+class SearchClass(views.APIView):
+    def get(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        json = JSONParser().parse(stream)
 
+        try:
+            timetable = models.Timetable.objects.get(
+                school__name=json['school'])
+        except models.Timetable.DoesNotExist:
+            raise exceptions.SchoolNotFoundException()
 
-class ClassList(generics.ListAPIView):
-    queryset = models.Class.objects.filter(timetable__active=True)
-    serializer_class = serializers.ClassSerializer
-
-
-class PeriodList(generics.ListAPIView):
-    queryset = models.Period.objects.filter(timetable__active=True)
-    serializer_class = serializers.PeriodSerializer
-
-
-class ClassroomList(generics.ListAPIView):
-    queryset = models.Classroom.objects.filter(timetable__active=True)
-    serializer_class = serializers.ClassroomSerializer
+        if models.Class.objects.filter(grade=json['grade'], letter=json['letter'], timetable=timetable).exists():
+            return Response(status=status.HTTP_302_FOUND)
+        else:
+            raise exceptions.ClassNotFoundException()
 
 
 class SchoolList(generics.RetrieveUpdateDestroyAPIView):
@@ -68,7 +66,7 @@ class TimetableLoadView(views.APIView):
             exists = models.Group.objects.filter(
                 timetable=timetable,
                 name=lesson['group']['name'],
-                classes__in=[__class.id for __class in classes])
+                classes__in=[__class.id for __class in classes]).exists()
 
             if not exists:
                 group = models.Group.objects.create(
