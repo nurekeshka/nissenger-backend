@@ -62,7 +62,7 @@ class Subject(models.Model):
     )
 
     name: str = models.CharField(max_length=50, verbose_name='name')
-    type = models.CharField(max_length=50, choices=SUBJECT_TYPE_CHOICES, verbose_name='type')
+    type = models.CharField(max_length=50, choices=SUBJECT_TYPE_CHOICES, default='CASUAL SUBJECT', verbose_name='type')
     timetable: Timetable = models.ForeignKey(
         Timetable, on_delete=models.CASCADE, verbose_name='timetable')
 
