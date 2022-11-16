@@ -27,12 +27,7 @@ class SearchClass(views.APIView):
             raise exceptions.ClassNotFoundException()
 
 
-class SchoolList(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.School.objects.all()
-    serializer_class = serializers.SchoolSerializer
-
-
-class RetrieveSchool(generics.RetrieveAPIView):
+class SchoolList(generics.ListAPIView):
     queryset = models.School.objects.all()
     serializer_class = serializers.SchoolSerializer
 
