@@ -4,6 +4,8 @@ from rest_framework.request import Request
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import views
+
+from apps.timetable import utils
 from . import exceptions
 from . import serializers
 from . import models
@@ -19,7 +21,7 @@ class SearchClass(views.APIView):
             timetable = models.Timetable.objects.get(
                 school__name=json['school'])
         except models.Timetable.DoesNotExist:
-            raise exceptions.SchoolNotFoundException()
+            raise exceptions.TimetableNotFoundException()
 
         if models.Class.objects.filter(grade=json['grade'], letter=json['letter'], timetable=timetable).exists():
             return Response(status=status.HTTP_302_FOUND)
@@ -58,10 +60,13 @@ class TimetableLoadView(views.APIView):
             classes = [models.Class.objects.get_or_create(grade=__class['grade'], letter=__class['letter'], timetable=timetable)[
                 0] for __class in lesson['group']['classes']]
 
-            exists = models.Group.objects.filter(
-                timetable=timetable,
-                name=lesson['group']['name'],
-                classes__in=[__class.id for __class in classes]).exists()
+            # exists = models.Group.objects.filter(
+            #     timetable=timetable,
+            #     name=lesson['group']['name'],
+            #     classes__in=[__class.id for __class in classes]).exists()
+
+            exists = utils.search_for_group(
+                lesson['group']['name'], classes).exists()
 
             if not exists:
                 group = models.Group.objects.create(
@@ -77,3 +82,21 @@ class TimetableLoadView(views.APIView):
             )
 
         return Response(status=status.HTTP_201_CREATED)
+
+
+class TeachersList(views.APIView):
+    def get(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        json = JSONParser().parse(stream)
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school__name=json['school'])
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        teachers = models.Teacher.objects.filter(timetable=timetable)
+        serializer = serializers.TeacherSerializer(
+            instance=teachers, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
