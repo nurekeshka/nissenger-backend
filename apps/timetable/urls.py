@@ -6,4 +6,5 @@ urlpatterns = [
     path('upload', views.TimetableLoadView.as_view(), name='timetable-upload'),
     path('schools/', views.SchoolList.as_view(), name='list-schools'),
     path('lessons/', views.LessonsList.as_view(), name='list-lessons'),
+    path('teachers/', views.TeachersList.as_view(), name='list-teachers'),
 ]
