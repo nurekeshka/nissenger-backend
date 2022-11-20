@@ -10,4 +10,6 @@ urlpatterns = [
     path('teachers/', views.TeachersList.as_view(), name='list-teachers'),
     path('subjects/profile-directed/',
          views.ProfileSubjectsList.as_view(), name='list-profile-subjects'),
+    path('groups/profile-directed/', views.ProfileGroupsList.as_view(),
+         name='list-profile-groups'),
 ]
