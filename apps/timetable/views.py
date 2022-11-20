@@ -189,3 +189,22 @@ class ProfileGroupsList(views.APIView):
         serializer = serializers.GroupsListSerializer(
             instance=groups, many=True)
         return Response(data=serializer.data)
+
+
+class ForeignLanguageSubjects(views.APIView):
+    def get(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school__name=data['school'], active=True)
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        subjects = models.Subject.objects.filter(
+            type='FL', timetable=timetable)
+
+        serializer = serializers.SubjectSerializer(
+            instance=subjects, many=True)
+        return Response(data=serializer.data)
