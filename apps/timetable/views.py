@@ -61,7 +61,7 @@ class TimetableLoadView(views.APIView):
                 0] for __class in lesson['group']['classes']]
 
             exists = utils.search_for_group(
-                lesson['group']['name'], classes).exists()
+                lesson['group']['name'], classes, timetable).exists()
 
             if not exists:
                 group = models.Group.objects.create(
