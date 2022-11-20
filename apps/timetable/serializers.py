@@ -24,7 +24,14 @@ class GroupSerializer(ModelSerializer):
     class Meta:
         model = models.Group
         fields = ('id', 'name', 'classes', 'timetable')
-        depth = 1
+
+
+class GroupsListSerializer(GroupSerializer):
+    def to_representation(self, instance: models.Group):
+        return {
+            'name': instance.name,
+            'classes': [{'grade': __class.grade, 'letter': __class.letter} for __class in instance.classes.all()]
+        }
 
 
 class TeacherSerializer(ModelSerializer):
@@ -66,7 +73,7 @@ class LessonsListSerializer(LessonSerializer):
             },
             'group': {
                 'name': instance.group.name,
-                'classes': [str(__class) for __class in instance.group.classes.all()]
+                'classes': [{'grade': __class.grade, 'letter': __class.letter} for __class in instance.group.classes.all()]
             }
         }
 
