@@ -60,11 +60,6 @@ class TimetableLoadView(views.APIView):
             classes = [models.Class.objects.get_or_create(grade=__class['grade'], letter=__class['letter'], timetable=timetable)[
                 0] for __class in lesson['group']['classes']]
 
-            # exists = models.Group.objects.filter(
-            #     timetable=timetable,
-            #     name=lesson['group']['name'],
-            #     classes__in=[__class.id for __class in classes]).exists()
-
             exists = utils.search_for_group(
                 lesson['group']['name'], classes).exists()
 
@@ -100,3 +95,29 @@ class TeachersList(views.APIView):
             instance=teachers, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class LessonsList(views.APIView):
+    def get(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school__name=data['school'])
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        __class = models.Class.objects.get(
+            timetable=timetable, grade=data['class']['grade'], letter=data['class']['letter'])
+
+        lessons = models.Lesson.objects.filter(
+            group__name=data['group'], group__classes__in=[__class], timetable=timetable)
+
+        for profile in data['profile_groups']:
+            lessons.union(models.Lesson.objects.filter(
+                group__name=profile, group__classes__in=[__class], timetable=timetable))
+
+        serializer = serializers.LessonsListSerializer(
+            instance=lessons, many=True)
+        return Response(data=serializer.data)
