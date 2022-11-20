@@ -48,7 +48,7 @@ class TimetableLoadView(views.APIView):
             teacher = models.Teacher.objects.get_or_create(
                 timetable=timetable, name=lesson['teacher']['name'])[0]
             subject = models.Subject.objects.get_or_create(
-                timetable=timetable, name=lesson['subject']['name'])[0]
+                timetable=timetable, name=lesson['subject']['name'], type=lesson['subject']['type'])[0]
             classroom = models.Classroom.objects.get_or_create(
                 timetable=timetable, name=lesson['classroom']['name'])[0]
             period = models.Period.objects.get_or_create(
