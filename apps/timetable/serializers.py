@@ -51,6 +51,25 @@ class LessonSerializer(ModelSerializer):
                   'group', 'period', 'day', 'timetable')
 
 
+class LessonsListSerializer(LessonSerializer):
+    def to_representation(self, instance: models.Lesson):
+        return {
+            'subject': instance.subject.name,
+            'classroom': instance.classroom.name,
+            'teacher': instance.teacher.name,
+            'day': instance.day.name,
+            'period': {
+                'number': instance.period.number,
+                'starttime': instance.period.starttime,
+                'endtime': instance.period.endtime,
+            },
+            'group': {
+                'name': instance.group.name,
+                'classes': [str(__class) for __class in instance.group.classes.all()]
+            }
+        }
+
+
 class PeriodSerializer(ModelSerializer):
     class Meta:
         model = models.Period
@@ -61,22 +80,3 @@ class SchoolSerializer(ModelSerializer):
     class Meta:
         model = models.School
         fields = ('id', 'name', 'city')
-
-
-def parse_lesson(lesson: dict):
-    lesson['subject'] = models.Subject.objects.get(
-        id=lesson['subject']).name
-    lesson['classroom'] = models.Classroom.objects.get(
-        id=lesson['classroom']).name
-    lesson['teacher'] = models.Teacher.objects.get(
-        id=lesson['teacher']).name
-    lesson['period'] = PeriodSerializer(
-        instance=models.Period.objects.get(id=lesson['period'])).data
-
-    lesson['group'] = GroupSerializer(
-        instance=models.Group.objects.get(id=lesson['group'])).data
-
-    lesson['group']['classes'] = [ClassSerializer(
-        instance=models.Class.objects.get(id=__class)).data for __class in lesson['group']['classes']]
-
-    return lesson
