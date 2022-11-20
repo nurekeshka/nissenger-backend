@@ -29,6 +29,27 @@ class SearchClass(views.APIView):
             raise exceptions.ClassNotFoundException()
 
 
+class SearchGroup(views.APIView):
+    def get(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        json = JSONParser().parse(stream)
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school__name=json['school'], active=True)
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        classes = [models.Class.objects.get_or_create(grade=__class['grade'], letter=__class['letter'], timetable=timetable)[
+            0] for __class in json['classes']]
+
+        group = utils.search_for_group(
+            name=json['name'], classes=classes, timetable=timetable)
+        serializer = serializers.GroupSerializer(instance=group, many=True)
+
+        return Response(data=serializer.data)
+
+
 class SchoolList(generics.ListAPIView):
     queryset = models.School.objects.all()
     serializer_class = serializers.SchoolSerializer
