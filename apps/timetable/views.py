@@ -19,7 +19,7 @@ class SearchClass(views.APIView):
 
         try:
             timetable = models.Timetable.objects.get(
-                school__name=json['school'])
+                school__name=json['school'], active=True)
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
@@ -86,7 +86,7 @@ class TeachersList(views.APIView):
 
         try:
             timetable = models.Timetable.objects.get(
-                school__name=json['school'])
+                school__name=json['school'], active=True)
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
@@ -104,7 +104,7 @@ class LessonsList(views.APIView):
 
         try:
             timetable = models.Timetable.objects.get(
-                school__name=data['school'])
+                school__name=data['school'], active=True)
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
@@ -120,4 +120,23 @@ class LessonsList(views.APIView):
 
         serializer = serializers.LessonsListSerializer(
             instance=lessons, many=True)
+        return Response(data=serializer.data)
+
+
+class ProfileSubjectsList(views.APIView):
+    def get(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school__name=data['school'], active=True)
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        subjects = models.Subject.objects.filter(
+            timetable=timetable, type='PD')
+
+        serializer = serializers.SubjectSerializer(
+            instance=subjects, many=True)
         return Response(data=serializer.data)

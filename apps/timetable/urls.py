@@ -7,4 +7,6 @@ urlpatterns = [
     path('schools/', views.SchoolList.as_view(), name='list-schools'),
     path('lessons/', views.LessonsList.as_view(), name='list-lessons'),
     path('teachers/', views.TeachersList.as_view(), name='list-teachers'),
+    path('subjects/profile-directed/',
+         views.ProfileSubjectsList.as_view(), name='list-profile-subjects'),
 ]
