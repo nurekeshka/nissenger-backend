@@ -66,8 +66,8 @@ class TeacherAdmin(admin.ModelAdmin):
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'timetable')
-    fields = ('name', 'timetable')
+    list_display = ('id', 'name', 'type', 'timetable')
+    fields = ('name', 'type', 'timetable')
     list_filter = ('timetable__id',)
 
 
@@ -93,4 +93,4 @@ class LessonAdmin(admin.ModelAdmin):
               'group', 'day', 'period', 'timetable')
     search_fields = ('subject__name', 'classroom__name', 'teacher__name',
                      'group__name', 'day__name', 'period__number')
-    list_filter = ('timetable__id', 'day__name')
+    list_filter = ('timetable__id', 'day__name', 'subject__name')
