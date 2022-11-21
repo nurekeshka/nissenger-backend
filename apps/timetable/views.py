@@ -88,12 +88,16 @@ class TimetableLoadView(views.APIView):
             exists = utils.search_for_group(
                 lesson['group']['name'], classes, timetable).exists()
 
-            if not exists:
+            if exists:
+                group = utils.search_for_group(
+                    lesson['group']['name'], classes, timetable).first()
+            else:
                 group = models.Group.objects.create(
                     timetable=timetable,
                     name=lesson['group']['name']
                 )
                 group.classes.set(classes)
+                group.save()
 
             models.Lesson.objects.create(
                 subject=subject, classroom=classroom,
@@ -136,15 +140,25 @@ class LessonsList(views.APIView):
         __class = models.Class.objects.get(
             timetable=timetable, grade=data['class']['grade'], letter=data['class']['letter'])
 
-        lessons = models.Lesson.objects.filter(
-            group__name=data['group'], group__classes__in=[__class], timetable=timetable)
+        group = utils.search_for_group(
+            data['group'], [__class], timetable).first()
+        lessons = models.Lesson.objects.filter(group=group)
 
-        for profile in data['profile_groups']:
-            lessons.union(models.Lesson.objects.filter(
-                group__name=profile, group__classes__in=[__class], timetable=timetable))
+        if data['profile_groups']:
+            for profile in data['profile_groups']:
+                lessons = lessons.union(models.Lesson.objects.filter(
+                    group__name=profile, group__classes__in=[__class], timetable=timetable))
+
+        if data['foreign_language']:
+            foreign_language_groups = models.Group.objects.filter(
+                name=data['foreign_language'], classes__in=[__class], timetable=timetable)
+
+            for group in foreign_language_groups:
+                lessons = lessons.union(
+                    models.Lesson.objects.filter(group=group))
 
         serializer = serializers.LessonsListSerializer(
-            instance=lessons, many=True)
+            instance=lessons.order_by('subject'), many=True)
         return Response(data=serializer.data)
 
 
