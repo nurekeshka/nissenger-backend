@@ -40,8 +40,11 @@ class SearchGroup(views.APIView):
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
-        classes = [models.Class.objects.get_or_create(grade=__class['grade'], letter=__class['letter'], timetable=timetable)[
-            0] for __class in json['classes']]
+        try:
+            classes = [models.Class.objects.get(
+                grade=__class['grade'], letter=__class['letter'], timetable=timetable) for __class in json['classes']]
+        except models.Class.DoesNotExist:
+            raise exceptions.ClassNotFoundException()
 
         group = utils.search_for_group(
             name=json['name'], classes=classes, timetable=timetable)
