@@ -45,7 +45,8 @@ class SearchGroup(views.APIView):
 
         group = utils.search_for_group(
             name=json['name'], classes=classes, timetable=timetable)
-        serializer = serializers.GroupSerializer(instance=group, many=True)
+        serializer = serializers.GroupsListSerializer(
+            instance=group, many=True)
 
         return Response(data=serializer.data)
 
