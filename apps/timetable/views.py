@@ -149,10 +149,24 @@ class TeachersList(views.APIView):
         json = JSONParser().parse(stream)
 
         try:
-            timetable = models.Timetable.objects.get(
-                school__name=json['school'], active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
+            try:
+                city = models.City.objects.get(name=json['school']['city'])
+            except models.City.DoesNotExist:
+                raise exceptions.CityNotFoundExceptionHandler()
+
+            try:
+                school = models.School.objects.get(
+                    name=json['school']['name'], city=city)
+            except models.School.DoesNotExist:
+                raise exceptions.SchoolNotFoundExceptionHandler()
+
+            try:
+                timetable = models.Timetable.objects.get(
+                    school=school, active=True)
+            except models.Timetable.DoesNotExist:
+                raise exceptions.TimetableNotFoundException()
+        except KeyError:
+            raise exceptions.KeyErrorExceptionHandler()
 
         teachers = models.Teacher.objects.filter(timetable=timetable)
         serializer = serializers.TeacherSerializer(
