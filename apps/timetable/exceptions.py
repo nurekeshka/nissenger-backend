@@ -20,3 +20,8 @@ class KeyErrorExceptionHandler(APIException):
 class CityNotFoundExceptionHandler(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = 'City not found in the database.'
+
+
+class SchoolNotFoundExceptionHandler(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = 'School not found in the database.'
