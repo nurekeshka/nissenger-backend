@@ -23,9 +23,12 @@ class SearchClass(views.APIView):
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
-        if models.Class.objects.filter(grade=json['grade'], letter=json['letter'], timetable=timetable).exists():
-            return Response(status=status.HTTP_302_FOUND)
-        else:
+        try:
+            __class = models.Class.objects.get(
+                grade=json['grade'], letter=json['letter'], timetable=timetable)
+            serializer = serializers.ClassSerializer(instance=__class)
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        except models.Class.DoesNotExist:
             raise exceptions.ClassNotFoundException()
 
 
