@@ -161,7 +161,7 @@ class LessonsList(views.APIView):
                     models.Lesson.objects.filter(group=group))
 
         serializer = serializers.LessonsListSerializer(
-            instance=lessons.order_by('day'), many=True)
+            instance=utils.sort_lessons_by_day_and_period(lessons), many=True)
         return Response(data=serializer.data)
 
 
