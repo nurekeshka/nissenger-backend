@@ -88,3 +88,4 @@ class SchoolSerializer(ModelSerializer):
     class Meta:
         model = models.School
         fields = ('id', 'name', 'city')
+        depth = 1
