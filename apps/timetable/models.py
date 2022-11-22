@@ -114,6 +114,7 @@ class Period(models.Model):
     class Meta:
         verbose_name = 'period'
         verbose_name_plural = 'periods'
+        ordering = ('timetable', 'number',)
 
     def __str__(self):
         return ' - '.join((self.starttime.strftime('%H:%M'), self.endtime.strftime('%H:%M')))
@@ -180,6 +181,7 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'lesson'
         verbose_name_plural = 'lessons'
+        ordering = ('day', 'period__number')
 
     def __str__(self):
         return self.subject.name
