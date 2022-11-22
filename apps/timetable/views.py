@@ -140,8 +140,14 @@ class LessonsList(views.APIView):
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
-        __class = models.Class.objects.get(
-            timetable=timetable, grade=data['class']['grade'], letter=data['class']['letter'])
+        try:
+            __class = models.Class.objects.get(
+                timetable=timetable, grade=data['class']['grade'], letter=data['class']['letter'])
+        except models.Class.DoesNotExist:
+            raise exceptions.ClassNotFoundException
+        except KeyError:
+            raise exceptions.KeyErrorExceptionHandler(
+                'Class grade or letter was not provided')
 
         group = utils.search_for_group(
             data['group'], [__class], timetable).first()
