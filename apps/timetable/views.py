@@ -144,12 +144,12 @@ class LessonsList(views.APIView):
             data['group'], [__class], timetable).first()
         lessons = models.Lesson.objects.filter(group=group)
 
-        if data['profile_groups']:
+        if data.get('profile_groups'):
             for profile in data['profile_groups']:
                 lessons = lessons.union(models.Lesson.objects.filter(
                     group__name=profile, group__classes__in=[__class], timetable=timetable))
 
-        if data['foreign_language']:
+        if data.get('foreign_language'):
             foreign_language_groups = models.Group.objects.filter(
                 name=data['foreign_language'], classes__in=[__class], timetable=timetable)
 
@@ -158,7 +158,7 @@ class LessonsList(views.APIView):
                     models.Lesson.objects.filter(group=group))
 
         serializer = serializers.LessonsListSerializer(
-            instance=lessons.order_by('subject'), many=True)
+            instance=lessons.order_by('day'), many=True)
         return Response(data=serializer.data)
 
 
