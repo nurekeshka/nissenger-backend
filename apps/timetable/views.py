@@ -46,29 +46,47 @@ class SearchClass(views.APIView):
             raise exceptions.KeyErrorExceptionHandler()
 
 
-class SearchGroup(views.APIView):
+class SearchGroups(views.APIView):
     def get(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         json = JSONParser().parse(stream)
 
         try:
-            timetable = models.Timetable.objects.get(
-                school__name=json['school'], active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
+            try:
+                city = models.City.objects.get(name=json['school']['city'])
+            except models.City.DoesNotExist:
+                raise exceptions.CityNotFoundExceptionHandler()
 
-        try:
-            classes = [models.Class.objects.get(
-                grade=__class['grade'], letter=__class['letter'], timetable=timetable) for __class in json['classes']]
-        except models.Class.DoesNotExist:
-            raise exceptions.ClassNotFoundException()
+            try:
+                school = models.School.objects.get(
+                    name=json['school']['name'], city=city)
+            except models.School.DoesNotExist:
+                raise exceptions.SchoolNotFoundExceptionHandler()
 
-        group = utils.search_for_group(
-            name=json['name'], classes=classes, timetable=timetable)
-        serializer = serializers.GroupsListSerializer(
-            instance=group, many=True)
+            try:
+                timetable = models.Timetable.objects.get(
+                    school=school, active=True)
+            except models.Timetable.DoesNotExist:
+                raise exceptions.TimetableNotFoundException()
 
-        return Response(data=serializer.data)
+            try:
+                classes = [models.Class.objects.get(
+                    grade=__class['grade'], letter=__class['letter'], timetable=timetable) for __class in json['group']['classes']]
+            except models.Class.DoesNotExist:
+                raise exceptions.ClassNotFoundException()
+
+            group = utils.search_for_group(
+                name=json['group']['name'], classes=classes, timetable=timetable)
+
+            if not group.exists():
+                raise exceptions.GroupNotFoundExceptionHandler()
+
+            serializer = serializers.GroupsListSerializer(
+                instance=group, many=True)
+
+            return Response(data=serializer.data)
+        except KeyError:
+            raise exceptions.KeyErrorExceptionHandler()
 
 
 class SchoolList(generics.ListAPIView):
