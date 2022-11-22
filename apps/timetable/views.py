@@ -181,8 +181,19 @@ class LessonsList(views.APIView):
         data = JSONParser().parse(stream)
 
         try:
+            city = models.City.objects.get(name=data['school']['city'])
+        except models.City.DoesNotExist:
+            raise exceptions.CityNotFoundExceptionHandler()
+
+        try:
+            school = models.School.objects.get(
+                name=data['school']['name'], city=city)
+        except models.School.DoesNotExist:
+            raise exceptions.SchoolNotFoundExceptionHandler()
+
+        try:
             timetable = models.Timetable.objects.get(
-                school__name=data['school'], active=True)
+                school=school, active=True)
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
