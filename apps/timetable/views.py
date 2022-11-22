@@ -264,8 +264,19 @@ class ProfileGroupsList(views.APIView):
         data = JSONParser().parse(stream)
 
         try:
+            city = models.City.objects.get(name=data['school']['city'])
+        except models.City.DoesNotExist:
+            raise exceptions.CityNotFoundExceptionHandler()
+
+        try:
+            school = models.School.objects.get(
+                name=data['school']['name'], city=city)
+        except models.School.DoesNotExist:
+            raise exceptions.SchoolNotFoundExceptionHandler()
+
+        try:
             timetable = models.Timetable.objects.get(
-                school__name=data['school'], active=True)
+                school=school, active=True)
         except models.Timetable.DoesNotExist:
             raise exceptions.TimetableNotFoundException()
 
@@ -273,13 +284,14 @@ class ProfileGroupsList(views.APIView):
             name=data['subject'], type='PD', timetable=timetable)
 
         __class = models.Class.objects.get(
-            grade=data['grade'], letter=data['letter'], timetable=timetable)
+            grade=data['class']['grade'], letter=data['class']['letter'], timetable=timetable)
 
-        lessons = models.Lesson.objects.distinct('group').filter(
-            subject=subject, timetable=timetable,
-            group__classes__in=[__class])
+        unique_groups = set()
 
-        groups = [lesson.group for lesson in lessons.all()]
+        for lesson in models.Lesson.objects.filter(subject=subject, timetable=timetable, group__classes__in=[__class]):
+            unique_groups.add(lesson.group.pk)
+
+        groups = [models.Group.objects.get(pk=id) for id in unique_groups]
 
         serializer = serializers.GroupsListSerializer(
             instance=groups, many=True)
