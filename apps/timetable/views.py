@@ -18,18 +18,32 @@ class SearchClass(views.APIView):
         json = JSONParser().parse(stream)
 
         try:
-            timetable = models.Timetable.objects.get(
-                school__name=json['school'], active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
+            try:
+                city = models.City.objects.get(name=json['school']['city'])
+            except models.City.DoesNotExist:
+                raise exceptions.CityNotFoundExceptionHandler()
 
-        try:
-            __class = models.Class.objects.get(
-                grade=json['grade'], letter=json['letter'], timetable=timetable)
-            serializer = serializers.ClassSerializer(instance=__class)
-            return Response(status=status.HTTP_200_OK, data=serializer.data)
-        except models.Class.DoesNotExist:
-            raise exceptions.ClassNotFoundException()
+            try:
+                school = models.School.objects.get(
+                    name=json['school']['name'], city=city)
+            except models.School.DoesNotExist:
+                raise exceptions.SchoolNotFoundExceptionHandler()
+
+            try:
+                timetable = models.Timetable.objects.get(
+                    school=school, active=True)
+            except models.Timetable.DoesNotExist:
+                raise exceptions.TimetableNotFoundException()
+
+            try:
+                __class = models.Class.objects.get(
+                    grade=json['class']['grade'], letter=json['class']['letter'], timetable=timetable)
+                serializer = serializers.ClassSerializer(instance=__class)
+                return Response(status=status.HTTP_200_OK, data=serializer.data)
+            except models.Class.DoesNotExist:
+                raise exceptions.ClassNotFoundException()
+        except KeyError:
+            raise exceptions.KeyErrorExceptionHandler()
 
 
 class SearchGroup(views.APIView):
