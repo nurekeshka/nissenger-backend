@@ -21,3 +21,14 @@ class Telegram(models.Model):
 
     def __str__(self) -> str:
         return self.get_full_name()
+
+
+# class Report(models.Model):
+#     user = models.ForeignKey(
+#         Telegram, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='user')
+#     message = models.CharField(max_length=500, verbose_name='message')
+#     created = models.DateTimeField(auto_now_add=True)
+
+#     class Meta:
+#         verbose_name = 'report'
+#         verbose_name_plural = 'reports'
