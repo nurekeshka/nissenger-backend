@@ -25,3 +25,8 @@ class CityNotFoundExceptionHandler(APIException):
 class SchoolNotFoundExceptionHandler(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = 'School not found in the database.'
+
+
+class GroupNotFoundExceptionHandler(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = 'Group not found in the database.'
