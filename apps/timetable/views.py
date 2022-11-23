@@ -13,7 +13,7 @@ import io
 
 
 class SearchClass(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         json = JSONParser().parse(stream)
 
@@ -144,7 +144,7 @@ class TimetableLoadView(views.APIView):
 
 
 class TeachersList(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         json = JSONParser().parse(stream)
 
@@ -176,7 +176,7 @@ class TeachersList(views.APIView):
 
 
 class LessonsList(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
 
@@ -259,7 +259,7 @@ class ProfileSubjectsList(views.APIView):
 
 
 class ProfileGroupsList(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
 
@@ -299,7 +299,7 @@ class ProfileGroupsList(views.APIView):
 
 
 class ForeignLanguageSubjects(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
 
