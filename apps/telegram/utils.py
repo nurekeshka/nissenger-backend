@@ -3,21 +3,24 @@ from telebot import TeleBot
 from telebot import types
 
 
-bot = TeleBot(token=settings.TELEGRAM, threaded=True)
+class TelegramBot(TeleBot):
+    token = settings.TELEGRAM
+    threaded = True
+    parse_mode = 'html'
+
+    def __init__(self):
+        super(TelegramBot, self).__init__(
+            token=self.token,
+            parse_mode=self.parse_mode,
+            threaded=self.threaded,
+        )
+
+    def reply_to(message: types.Message, text: str, markup: types.InlineKeyboardMarkup = None):
+        bot.send_message(
+            chat_id=message.chat.id,
+            text=text,
+            reply_markup=markup,
+        )
 
 
-def reply(message: types.Message, text: str):
-    bot.send_message(
-        chat_id=message.chat.id,
-        text=text,
-        parse_mode='html'
-    )
-
-
-def reply_with_markup(message: types.Message, text: str, markup: types.InlineKeyboardMarkup):
-    bot.send_message(
-        chat_id=message.chat.id,
-        text=text,
-        parse_mode='html',
-        reply_markup=markup
-    )
+bot = TelegramBot()
