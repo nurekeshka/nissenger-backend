@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from ...views import bot
+from ...routes import bot
 
 
 class Command(BaseCommand):
