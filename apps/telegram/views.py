@@ -1,9 +1,33 @@
-from .constants import Messages
 from telebot import types
-from .utils import bot
-from . import utils
 
 
-@bot.message_handler(commands=['start'])
-def start_command(message: types.Message):
-    utils.reply(message, '\n\n'.join(Messages.start_command.value))
+class BaseInlineKeyboardMarkup(types.InlineKeyboardMarkup):
+    buttons = []
+
+    def __init__(self):
+        super(BaseInlineKeyboardMarkup, self).__init__()
+        self.interface()
+
+    def interface():
+        for button in self.buttons:
+            self.add(button)
+
+
+class BaseInlineKeyboardButton(types.InlineKeyboardButton):
+    text = None
+    callback_data = None
+
+    def __init__(self):
+        super(BaseInlineKeyboardButton, self).__init__(
+            text=self.text,
+            callback_data=self.callback_data
+        )
+
+
+class ReportButton(BaseInlineKeyboardButton):
+    text = 'Написать в тех. поддержку 🤖'
+    callback_data = 'report'
+
+
+class MenuMarkup(BaseInlineKeyboardMarkup):
+    buttons = [ReportButton()]
