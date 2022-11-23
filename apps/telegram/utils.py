@@ -15,7 +15,7 @@ class TelegramBot(TeleBot):
             threaded=self.threaded,
         )
 
-    def reply_to(message: types.Message, text: str, markup: types.InlineKeyboardMarkup = None):
+    def reply_to(self, message: types.Message, text: str, markup: types.InlineKeyboardMarkup = None):
         bot.send_message(
             chat_id=message.chat.id,
             text=text,
