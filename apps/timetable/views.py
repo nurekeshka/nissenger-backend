@@ -47,7 +47,7 @@ class SearchClass(views.APIView):
 
 
 class SearchGroups(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         json = JSONParser().parse(stream)
 
@@ -229,7 +229,7 @@ class LessonsList(views.APIView):
 
 
 class ProfileSubjectsList(views.APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
 
