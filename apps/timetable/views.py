@@ -223,9 +223,13 @@ class LessonsList(views.APIView):
                 lessons = lessons.union(
                     models.Lesson.objects.filter(group=group))
 
-        serializer = serializers.LessonsListSerializer(
-            instance=utils.sort_lessons_by_day_and_period(lessons), many=True)
-        return Response(data=serializer.data)
+        dictionary = {day.name: list() for day in models.Day.objects.all()}
+
+        for lesson in lessons.all():
+            dictionary[lesson.day.name].append(serializers.LessonsListSerializer(instance=lesson).data)
+
+        response = [sorted(array, key=lambda x: x['period']['number']) for array in dictionary.values()]
+        return Response(data={'lessons': response})
 
 
 class ProfileSubjectsList(views.APIView):
