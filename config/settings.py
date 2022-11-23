@@ -145,4 +145,5 @@ REST_FRAMEWORK = {
 # STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 TELEGRAM = config.get('TOKENS', 'TELEGRAM')
+TELEGRAM_ADMIN_CHAT = config.get('TELEGRAM', 'ADMIN_CHAT')
 CURRENT_YEAR = int(config.get('TIMETABLE', 'YEAR'))
