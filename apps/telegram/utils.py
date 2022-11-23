@@ -22,5 +22,13 @@ class TelegramBot(TeleBot):
             reply_markup=markup,
         )
 
+    def edit(self, message: types.Message, text: str, markup: types.InlineKeyboardButton = None):
+        bot.edit_message_text(
+            chat_id=message.chat.id,
+            message_id=message.id,
+            text=text,
+            reply_markup=markup,
+        )
+
 
 bot = TelegramBot()
