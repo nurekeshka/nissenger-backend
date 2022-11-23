@@ -37,5 +37,11 @@ class TelegramBot(TeleBot):
             text=text,
         )
 
+    def forward_to_admins(self, text: str):
+        self.forward_to(
+            chat_id=self.admin_chat_id,
+            text=text
+        )
+
 
 bot = TelegramBot()
