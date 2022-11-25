@@ -226,10 +226,12 @@ class LessonsList(views.APIView):
         dictionary = {day.name: list() for day in models.Day.objects.all()}
 
         for lesson in lessons.all():
-            dictionary[lesson.day.name].append(serializers.LessonsListSerializer(instance=lesson).data)
+            dictionary[lesson.day.name].append(
+                serializers.LessonsListSerializer(instance=lesson).data)
 
-        response = [sorted(array, key=lambda x: x['period']['number']) for array in dictionary.values()]
-        return Response(data={'lessons': response})
+        response = [sorted(array, key=lambda x: x['period']['number'])
+                    for array in dictionary.values()]
+        return Response(data={'timetable': {'lessons': response}})
 
 
 class ProfileSubjectsList(views.APIView):
@@ -330,3 +332,44 @@ class ForeignLanguageSubjects(views.APIView):
         serializer = serializers.SubjectSerializer(
             instance=subjects, many=True)
         return Response(data=serializer.data)
+
+
+class LessonsListTeachers(views.APIView):
+    def post(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        try:
+            city = models.City.objects.get(name=data['school']['city'])
+        except models.City.DoesNotExist:
+            raise exceptions.CityNotFoundExceptionHandler()
+
+        try:
+            school = models.School.objects.get(
+                name=data['school']['name'], city=city)
+        except models.School.DoesNotExist:
+            raise exceptions.SchoolNotFoundExceptionHandler()
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school=school, active=True)
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        try:
+            teacher = models.Teacher.objects.get(
+                name=data['teacher'], timetable=timetable)
+        except models.Teacher.DoesNotExist:
+            raise exceptions.TeacherNotFoundExceptionHandler()
+
+        lessons = models.Lesson.objects.filter(teacher=teacher)
+
+        dictionary = {day.name: list() for day in models.Day.objects.all()}
+
+        for lesson in lessons.all():
+            dictionary[lesson.day.name].append(
+                serializers.LessonsListSerializer(instance=lesson).data)
+
+        response = [sorted(array, key=lambda x: x['period']['number'])
+                    for array in dictionary.values()]
+        return Response(data={'timetable': {'lessons': response}})
