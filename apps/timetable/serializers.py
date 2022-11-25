@@ -1,26 +1,26 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from . import models
 
 
-class TimetableSerializer(ModelSerializer):
+class TimetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Timetable
         fields = ('id', 'downloaded', 'school')
 
 
-class DaySerializer(ModelSerializer):
+class DaySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Day
         fields = ('id', 'name')
 
 
-class ClassSerializer(ModelSerializer):
+class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Class
         fields = ('id', 'grade', 'letter', 'timetable')
 
 
-class GroupSerializer(ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Group
         fields = ('id', 'name', 'classes', 'timetable')
@@ -34,25 +34,25 @@ class GroupsListSerializer(GroupSerializer):
         }
 
 
-class TeacherSerializer(ModelSerializer):
+class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Teacher
         fields = ('id', 'name', 'timetable')
 
 
-class SubjectSerializer(ModelSerializer):
+class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Subject
         fields = ('id', 'name', 'type', 'timetable')
 
 
-class ClassroomSerializer(ModelSerializer):
+class ClassroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Classroom
         fields = ('id', 'name', 'timetable')
 
 
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Lesson
         fields = ('id', 'subject', 'classroom', 'teacher',
@@ -78,13 +78,13 @@ class LessonsListSerializer(LessonSerializer):
         }
 
 
-class PeriodSerializer(ModelSerializer):
+class PeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Period
         fields = ('number', 'starttime', 'endtime', 'timetable')
 
 
-class SchoolSerializer(ModelSerializer):
+class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.School
         fields = ('id', 'name', 'city')
