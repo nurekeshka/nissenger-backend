@@ -45,14 +45,14 @@ class ReportCallbackAction(BaseCallbackAction):
 
     @classmethod
     def report(self, message: types.Message):
-        return '\n'.join([f'Репорт от: {message.from_user.id}',
-                          f'Имя пользователя: {message.from_user.username}',
-                          f'Имя: {message.from_user.first_name}',
-                          f'Фамилия: {message.from_user.last_name}',
-                          '',
-                          f'Текст:',
-                          message.text]
-                         )
+        return '\n'.join([
+            f'Имя пользователя: {message.from_user.username}',
+            f'Имя: {message.from_user.first_name}',
+            f'Фамилия: {message.from_user.last_name}',
+            f'Текст:',
+            message.text,
+            '',
+            f'REPORT_ID: {message.from_user.id}'])
 
     @classmethod
     def callback_action(self, call: types.CallbackQuery):
