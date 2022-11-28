@@ -43,9 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Project apps
-    'apps.accounts.apps.AccountsConfig',
     'apps.timetable.apps.TimetableConfig',
-    'apps.telegram.apps.TelegramConfig',
 ]
 
 MIDDLEWARE = [
