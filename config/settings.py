@@ -1,6 +1,5 @@
 import os
 import configparser
-from tkinter import CURRENT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -142,6 +141,3 @@ REST_FRAMEWORK = {
 
 # STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-TELEGRAM = config.get('TOKENS', 'TELEGRAM')
-TELEGRAM_ADMIN_CHAT = config.get('TELEGRAM', 'ADMIN_CHAT')
-CURRENT_YEAR = int(config.get('TIMETABLE', 'YEAR'))
