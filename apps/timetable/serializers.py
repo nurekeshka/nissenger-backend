@@ -68,8 +68,8 @@ class LessonsListSerializer(LessonSerializer):
             'day': instance.day.name,
             'period': {
                 'number': instance.period.number,
-                'start-time': instance.period.starttime,
-                'end-time': instance.period.endtime,
+                'start_time': instance.period.starttime,
+                'end_time': instance.period.endtime,
             },
             'group': {
                 'name': instance.group.name,
