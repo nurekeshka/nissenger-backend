@@ -15,6 +15,7 @@ SECRET_KEY = 'django-insecure-^ma$9!rq*=6)*6br$eaw6dg564id*^86r93x)@x23#4g5+_181
 # Allowing access to the web service from any domain
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 # Config
 config = configparser.ConfigParser()
