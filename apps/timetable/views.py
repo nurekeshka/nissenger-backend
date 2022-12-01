@@ -13,7 +13,7 @@ from . import utils
 class SearchClass(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, json, timetable, *args, **kwargs):
+    def post(self, request: Request, json: dict, timetable, *args, **kwargs):
         try:
             try:
                 __class = models.Class.objects.get(
@@ -30,7 +30,7 @@ class SearchClass(views.APIView):
 class SearchGroups(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, json, timetable, *args, **kwargs):
+    def post(self, request: Request, json: dict, timetable: models.Timetable, *args, **kwargs):
         try:
             try:
                 classes = [models.Class.objects.get(
@@ -59,7 +59,7 @@ class SchoolList(generics.ListAPIView):
 
 class TimetableLoadView(views.APIView):
     @utils.json
-    def post(self, request: Request, data, *args, **kwargs):
+    def post(self, request: Request, data: dict, *args, **kwargs):
         school = models.School.objects.get(pk=request.GET.get('school'))
         timetable = models.Timetable.objects.create(school=school)
 
@@ -107,7 +107,7 @@ class TimetableLoadView(views.APIView):
 class TeachersList(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, json, timetable, *args, **kwargs):
+    def post(self, request: Request, json: dict, timetable: models.Timetable, *args, **kwargs):
         teachers = models.Teacher.objects.filter(timetable=timetable)
         serializer = serializers.TeacherSerializer(
             instance=teachers, many=True)
@@ -118,7 +118,7 @@ class TeachersList(views.APIView):
 class LessonsList(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, data, timetable, *args, **kwargs):
+    def post(self, request: Request, data: dict, timetable: models.Timetable, *args, **kwargs):
         try:
             __class = models.Class.objects.get(
                 timetable=timetable, grade=data['class']['grade'], letter=data['class']['letter'])
@@ -159,7 +159,7 @@ class LessonsList(views.APIView):
 class ProfileSubjectsList(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, data, timetable, *args, **kwargs):
+    def post(self, request: Request, data: dict, timetable: models.Timetable, *args, **kwargs):
         subjects = models.Subject.objects.filter(
             timetable=timetable, type='PD')
 
@@ -171,7 +171,7 @@ class ProfileSubjectsList(views.APIView):
 class ProfileGroupsList(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, data, timetable, *args, **kwargs):
+    def post(self, request: Request, data: dict, timetable: models.Timetable, *args, **kwargs):
         subject = models.Subject.objects.get(
             name=data['subject'], type='PD', timetable=timetable)
 
@@ -193,7 +193,7 @@ class ProfileGroupsList(views.APIView):
 class ForeignLanguageSubjects(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, data, timetable, *args, **kwargs):
+    def post(self, request: Request, data: dict, timetable: models.Timetable, *args, **kwargs):
         subjects = models.Subject.objects.filter(
             type='FL', timetable=timetable)
 
@@ -205,7 +205,7 @@ class ForeignLanguageSubjects(views.APIView):
 class LessonsListTeachers(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, data, timetable, *args, **kwargs):
+    def post(self, request: Request, data: dict, timetable: models.Timetable, *args, **kwargs):
         try:
             teacher = models.Teacher.objects.get(
                 name=data['teacher'], timetable=timetable)
