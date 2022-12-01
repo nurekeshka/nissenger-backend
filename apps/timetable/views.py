@@ -138,12 +138,13 @@ class LessonsList(views.APIView):
                     group__name=profile, group__classes__in=[__class], timetable=timetable))
 
         if data.get('foreign_language'):
-            foreign_language_groups = models.Group.objects.filter(
-                name=data['foreign_language'], classes__in=[__class], timetable=timetable)
+            for fl_group_name in data['foreign_language']:
+                found_groups = models.Group.objects.filter(
+                    name=fl_group_name, classes__in=[__class], timetable=timetable)
 
-            for group in foreign_language_groups:
-                lessons = lessons.union(
-                    models.Lesson.objects.filter(group=group))
+                for group in found_groups:
+                    lessons = lessons.union(
+                        models.Lesson.objects.filter(group=group))
 
         dictionary = {day.name: list() for day in models.Day.objects.all()}
 
