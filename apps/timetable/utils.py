@@ -54,22 +54,26 @@ def json(function):
 def timetable(function):
     def wrapper(self, request, json, *args, **kwargs):
         try:
-            city = models.City.objects.get(name=json['school']['city'])
-        except models.City.DoesNotExist:
-            raise exceptions.CityNotFoundExceptionHandler()
+            try:
+                city = models.City.objects.get(name=json['school']['city'])
+            except models.City.DoesNotExist:
+                raise exceptions.CityNotFoundExceptionHandler()
 
-        try:
-            school = models.School.objects.get(
-                name=json['school']['name'], city=city)
-        except models.School.DoesNotExist:
-            raise exceptions.SchoolNotFoundExceptionHandler()
+            try:
+                school = models.School.objects.get(
+                    name=json['school']['name'], city=city)
+            except models.School.DoesNotExist:
+                raise exceptions.SchoolNotFoundExceptionHandler()
 
-        try:
-            timetable = models.Timetable.objects.get(
-                school=school, active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
+            try:
+                timetable = models.Timetable.objects.get(
+                    school=school, active=True)
+            except models.Timetable.DoesNotExist:
+                raise exceptions.TimetableNotFoundException()
 
-        return function(self, request, json, timetable, *args, **kwargs)
+            return function(self, request, json, timetable, *args, **kwargs)
+        except KeyError:
+            raise exceptions.KeyErrorExceptionHandler(
+                'Timetable\'s school or city was not provided.')
 
     return wrapper
