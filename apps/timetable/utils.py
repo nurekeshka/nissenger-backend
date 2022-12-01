@@ -1,7 +1,11 @@
+from rest_framework.parsers import JSONParser
 from django.db.models import Count
-from .constants import DAYS
 from typing import List
+
+from .constants import DAYS
+from . import exceptions
 from . import models
+import io
 
 
 def initialize_days():
@@ -35,3 +39,37 @@ def sort_lessons_by_day_and_period(lessons_queryset: List[models.Lesson]) -> Lis
         output.extend(sorted(lessons, key=lambda lesson: lesson.period.number))
 
     return output
+
+
+def json(function):
+    def wrapper(self, request, *args, **kwargs):
+        stream = io.BytesIO(request.body)
+        json = JSONParser().parse(stream)
+
+        return function(self, request, json, *args, **kwargs)
+
+    return wrapper
+
+
+def timetable(function):
+    def wrapper(self, request, json, *args, **kwargs):
+        try:
+            city = models.City.objects.get(name=json['school']['city'])
+        except models.City.DoesNotExist:
+            raise exceptions.CityNotFoundExceptionHandler()
+
+        try:
+            school = models.School.objects.get(
+                name=json['school']['name'], city=city)
+        except models.School.DoesNotExist:
+            raise exceptions.SchoolNotFoundExceptionHandler()
+
+        try:
+            timetable = models.Timetable.objects.get(
+                school=school, active=True)
+        except models.Timetable.DoesNotExist:
+            raise exceptions.TimetableNotFoundException()
+
+        return function(self, request, json, timetable, *args, **kwargs)
+
+    return wrapper
