@@ -13,28 +13,10 @@ import io
 
 
 class SearchClass(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        json = JSONParser().parse(stream)
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, json, timetable, *args, **kwargs):
         try:
-            try:
-                city = models.City.objects.get(name=json['school']['city'])
-            except models.City.DoesNotExist:
-                raise exceptions.CityNotFoundExceptionHandler()
-
-            try:
-                school = models.School.objects.get(
-                    name=json['school']['name'], city=city)
-            except models.School.DoesNotExist:
-                raise exceptions.SchoolNotFoundExceptionHandler()
-
-            try:
-                timetable = models.Timetable.objects.get(
-                    school=school, active=True)
-            except models.Timetable.DoesNotExist:
-                raise exceptions.TimetableNotFoundException()
-
             try:
                 __class = models.Class.objects.get(
                     grade=json['class']['grade'], letter=json['class']['letter'], timetable=timetable)
@@ -43,32 +25,15 @@ class SearchClass(views.APIView):
             except models.Class.DoesNotExist:
                 raise exceptions.ClassNotFoundException()
         except KeyError:
-            raise exceptions.KeyErrorExceptionHandler()
+            raise exceptions.KeyErrorExceptionHandler(
+                'Class grade or letter was not provided.')
 
 
 class SearchGroups(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        json = JSONParser().parse(stream)
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, json, timetable, *args, **kwargs):
         try:
-            try:
-                city = models.City.objects.get(name=json['school']['city'])
-            except models.City.DoesNotExist:
-                raise exceptions.CityNotFoundExceptionHandler()
-
-            try:
-                school = models.School.objects.get(
-                    name=json['school']['name'], city=city)
-            except models.School.DoesNotExist:
-                raise exceptions.SchoolNotFoundExceptionHandler()
-
-            try:
-                timetable = models.Timetable.objects.get(
-                    school=school, active=True)
-            except models.Timetable.DoesNotExist:
-                raise exceptions.TimetableNotFoundException()
-
             try:
                 classes = [models.Class.objects.get(
                     grade=__class['grade'], letter=__class['letter'], timetable=timetable) for __class in json['group']['classes']]
@@ -95,12 +60,10 @@ class SchoolList(generics.ListAPIView):
 
 
 class TimetableLoadView(views.APIView):
-    def post(self, request: Request, *args, **kwargs):
+    @utils.json
+    def post(self, request: Request, data, *args, **kwargs):
         school = models.School.objects.get(pk=request.GET.get('school'))
         timetable = models.Timetable.objects.create(school=school)
-
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
 
         for lesson in data['timetable']:
             day = models.Day.objects.get_or_create(
@@ -144,30 +107,9 @@ class TimetableLoadView(views.APIView):
 
 
 class TeachersList(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        json = JSONParser().parse(stream)
-
-        try:
-            try:
-                city = models.City.objects.get(name=json['school']['city'])
-            except models.City.DoesNotExist:
-                raise exceptions.CityNotFoundExceptionHandler()
-
-            try:
-                school = models.School.objects.get(
-                    name=json['school']['name'], city=city)
-            except models.School.DoesNotExist:
-                raise exceptions.SchoolNotFoundExceptionHandler()
-
-            try:
-                timetable = models.Timetable.objects.get(
-                    school=school, active=True)
-            except models.Timetable.DoesNotExist:
-                raise exceptions.TimetableNotFoundException()
-        except KeyError:
-            raise exceptions.KeyErrorExceptionHandler()
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, json, timetable, *args, **kwargs):
         teachers = models.Teacher.objects.filter(timetable=timetable)
         serializer = serializers.TeacherSerializer(
             instance=teachers, many=True)
@@ -176,27 +118,9 @@ class TeachersList(views.APIView):
 
 
 class LessonsList(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        try:
-            city = models.City.objects.get(name=data['school']['city'])
-        except models.City.DoesNotExist:
-            raise exceptions.CityNotFoundExceptionHandler()
-
-        try:
-            school = models.School.objects.get(
-                name=data['school']['name'], city=city)
-        except models.School.DoesNotExist:
-            raise exceptions.SchoolNotFoundExceptionHandler()
-
-        try:
-            timetable = models.Timetable.objects.get(
-                school=school, active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, data, timetable, *args, **kwargs):
         try:
             __class = models.Class.objects.get(
                 timetable=timetable, grade=data['class']['grade'], letter=data['class']['letter'])
@@ -204,7 +128,7 @@ class LessonsList(views.APIView):
             raise exceptions.ClassNotFoundException
         except KeyError:
             raise exceptions.KeyErrorExceptionHandler(
-                'Class grade or letter was not provided')
+                'Class grade or letter was not provided.')
 
         group = utils.search_for_group(
             data['group'], [__class], timetable).first()
@@ -235,27 +159,9 @@ class LessonsList(views.APIView):
 
 
 class ProfileSubjectsList(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        try:
-            city = models.City.objects.get(name=data['school']['city'])
-        except models.City.DoesNotExist:
-            raise exceptions.CityNotFoundExceptionHandler()
-
-        try:
-            school = models.School.objects.get(
-                name=data['school']['name'], city=city)
-        except models.School.DoesNotExist:
-            raise exceptions.SchoolNotFoundExceptionHandler()
-
-        try:
-            timetable = models.Timetable.objects.get(
-                school=school, active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, data, timetable, *args, **kwargs):
         subjects = models.Subject.objects.filter(
             timetable=timetable, type='PD')
 
@@ -265,27 +171,9 @@ class ProfileSubjectsList(views.APIView):
 
 
 class ProfileGroupsList(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        try:
-            city = models.City.objects.get(name=data['school']['city'])
-        except models.City.DoesNotExist:
-            raise exceptions.CityNotFoundExceptionHandler()
-
-        try:
-            school = models.School.objects.get(
-                name=data['school']['name'], city=city)
-        except models.School.DoesNotExist:
-            raise exceptions.SchoolNotFoundExceptionHandler()
-
-        try:
-            timetable = models.Timetable.objects.get(
-                school=school, active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, data, timetable, *args, **kwargs):
         subject = models.Subject.objects.get(
             name=data['subject'], type='PD', timetable=timetable)
 
@@ -305,27 +193,9 @@ class ProfileGroupsList(views.APIView):
 
 
 class ForeignLanguageSubjects(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        try:
-            city = models.City.objects.get(name=data['school']['city'])
-        except models.City.DoesNotExist:
-            raise exceptions.CityNotFoundExceptionHandler()
-
-        try:
-            school = models.School.objects.get(
-                name=data['school']['name'], city=city)
-        except models.School.DoesNotExist:
-            raise exceptions.SchoolNotFoundExceptionHandler()
-
-        try:
-            timetable = models.Timetable.objects.get(
-                school=school, active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, data, timetable, *args, **kwargs):
         subjects = models.Subject.objects.filter(
             type='FL', timetable=timetable)
 
@@ -335,27 +205,9 @@ class ForeignLanguageSubjects(views.APIView):
 
 
 class LessonsListTeachers(views.APIView):
-    def post(self, request, *args, **kwargs):
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        try:
-            city = models.City.objects.get(name=data['school']['city'])
-        except models.City.DoesNotExist:
-            raise exceptions.CityNotFoundExceptionHandler()
-
-        try:
-            school = models.School.objects.get(
-                name=data['school']['name'], city=city)
-        except models.School.DoesNotExist:
-            raise exceptions.SchoolNotFoundExceptionHandler()
-
-        try:
-            timetable = models.Timetable.objects.get(
-                school=school, active=True)
-        except models.Timetable.DoesNotExist:
-            raise exceptions.TimetableNotFoundException()
-
+    @utils.json
+    @utils.timetable
+    def post(self, request, data, timetable, *args, **kwargs):
         try:
             teacher = models.Teacher.objects.get(
                 name=data['teacher'], timetable=timetable)
