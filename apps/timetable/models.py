@@ -58,12 +58,14 @@ class Subject(models.Model):
     CASUAL_SUBJECT = 'CS'
     PROFILE_DIRECTED = 'PD'
     SAT_PREPARATION = 'SP'
+    MESK_PREPARATION = 'MP'
 
     SUBJECT_TYPE_CHOICES = (
         (FOREIGN_LANGUAGE, 'Foreign language'),
         (CASUAL_SUBJECT, 'Casual subject'),
         (PROFILE_DIRECTED, 'Profile directed'),
         (SAT_PREPARATION, 'SAT preparation'),
+        (MESK_PREPARATION, 'MESK preparation'),
     )
 
     name: str = models.CharField(max_length=50, verbose_name='name')
