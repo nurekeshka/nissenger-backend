@@ -148,7 +148,7 @@ class LessonsList(views.APIView):
                         group__name='мат7', group__classes__in=[__class], timetable=timetable
                     ))
 
-            elif __class.grade is 10:
+            elif __class.grade == 10:
                 subject = models.Subject.objects.get(
                     name=data['profile_groups'][0], type=models.Subject.MESK_PREPARATION, timetable=timetable)
 
@@ -255,3 +255,8 @@ class MeskPreparationSubjects(views.APIView):
             instance=subjects, many=True)
 
         return Response(serializer.data)
+
+
+class Online(views.APIView):
+    def get(self, request: Request, *args, **kwargs):
+        return Response()

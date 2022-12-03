@@ -18,4 +18,5 @@ urlpatterns = [
          name='list-profile-groups'),
     path('subjects/mesk/', views.MeskPreparationSubjects.as_view(),
          name='list-mesk-subjects'),
+    path('available/', views.Online.as_view(), name='is-available'),
 ]
