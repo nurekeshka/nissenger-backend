@@ -243,3 +243,15 @@ class LessonsListTeachers(views.APIView):
         response = [sorted(array, key=lambda x: x['period']['number'])
                     for array in dictionary.values()]
         return Response(data={'timetable': {'lessons': response}})
+
+
+class MeskPreparationSubjects(views.APIView):
+    @utils.json
+    @utils.timetable
+    def post(self, request: Request, json: dict, timetable: models.Timetable, *args, **kwargs):
+        subjects = models.Subject.objects.filter(
+            type=models.Subject.MESK_PREPARATION, timetable=timetable)
+        serializer = serializers.SubjectSerializer(
+            instance=subjects, many=True)
+
+        return Response(serializer.data)
