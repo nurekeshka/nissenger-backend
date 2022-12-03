@@ -130,12 +130,31 @@ class LessonsList(views.APIView):
 
         group = utils.search_for_group(
             data['group'], [__class], timetable).first()
-        lessons = models.Lesson.objects.filter(group=group)
+        lessons = models.Lesson.objects.filter(group=group).exclude(
+            subject__type=models.Subject.MESK_PREPARATION)
 
         if data.get('profile_groups'):
-            for profile in data['profile_groups']:
+            if __class.grade >= 11:
+                for profile in data['profile_groups']:
+                    lessons = lessons.union(models.Lesson.objects.filter(
+                        group__name=profile, group__classes__in=[__class], timetable=timetable))
+
+                if 'мат10' in data['profile_groups']:
+                    lessons = lessons.union(models.Lesson.objects.filter(
+                        group__name='мат10', group__classes__in=[__class], timetable=timetable
+                    ))
+                else:
+                    lessons = lessons.union(models.Lesson.objects.filter(
+                        group__name='мат7', group__classes__in=[__class], timetable=timetable
+                    ))
+
+            elif __class.grade is 10:
+                subject = models.Subject.objects.get(
+                    name=data['profile_groups'][0], type=models.Subject.MESK_PREPARATION, timetable=timetable)
+
                 lessons = lessons.union(models.Lesson.objects.filter(
-                    group__name=profile, group__classes__in=[__class], timetable=timetable))
+                    subject=subject, group=group, timetable=timetable
+                ))
 
         if data.get('foreign_language'):
             for fl_group_name in data['foreign_language']:
