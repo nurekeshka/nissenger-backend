@@ -16,4 +16,6 @@ urlpatterns = [
          views.ProfileSubjectsList.as_view(), name='list-profile-subjects'),
     path('groups/profile/', views.ProfileGroupsList.as_view(),
          name='list-profile-groups'),
+    path('subjects/mesk/', views.MeskPreparationSubjects.as_view(),
+         name='list-mesk-subjects'),
 ]
