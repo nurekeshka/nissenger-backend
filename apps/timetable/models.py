@@ -2,6 +2,10 @@ from datetime import datetime, time
 from typing import Set
 from django.db import models
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from apps.telegram.models import bot
+
 
 class City(models.Model):
     name: str = models.CharField(max_length=50, verbose_name='name')
@@ -51,6 +55,22 @@ class Timetable(models.Model):
     def deactivate(self):
         self.active = False
         self.save()
+
+
+@receiver(post_save, sender=Timetable)
+def create_user_token(sender: Timetable, instance: Timetable, created: bool, **kwargs):
+    if created:
+        info = (
+            f'Timetable for {instance.school} was created at: {instance.downloaded}',
+            'There are:',
+            f'{Teacher.objects.filter(timetable=instance).count()} teachers',
+            f'{Lesson.objects.filter(timetable=instance).count()} lessons',
+            f'{Classroom.objects.filter(timetable=instance).count()} classrooms',
+            f'{Group.objects.filter(timetable=instance).count()} groups',
+            f'{Subject.objects.filter(timetable=instance).count()} subjects',
+        )
+
+        bot.send_to_admins('\n'.join(info))
 
 
 class Subject(models.Model):
