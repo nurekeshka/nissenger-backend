@@ -56,18 +56,15 @@ class Timetable(models.Model):
         self.active = False
         self.save()
 
-
-@receiver(post_save, sender=Timetable)
-def create_user_token(sender: Timetable, instance: Timetable, created: bool, **kwargs):
-    if created:
+    def notify_admins(self):
         info = (
-            f'Timetable for {instance.school} was created at: {instance.downloaded}',
+            f'Timetable for {self.school} was created at: {self.downloaded}',
             'There are:',
-            f'{Teacher.objects.filter(timetable=instance).count()} teachers',
-            f'{Lesson.objects.filter(timetable=instance).count()} lessons',
-            f'{Classroom.objects.filter(timetable=instance).count()} classrooms',
-            f'{Group.objects.filter(timetable=instance).count()} groups',
-            f'{Subject.objects.filter(timetable=instance).count()} subjects',
+            f'{Teacher.objects.filter(timetable=self).count()} teachers',
+            f'{Lesson.objects.filter(timetable=self).count()} lessons',
+            f'{Classroom.objects.filter(timetable=self).count()} classrooms',
+            f'{Group.objects.filter(timetable=self).count()} groups',
+            f'{Subject.objects.filter(timetable=self).count()} subjects',
         )
 
         bot.send_to_admins('\n'.join(info))
