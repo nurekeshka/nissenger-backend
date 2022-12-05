@@ -5,5 +5,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('timetable/', include('apps.timetable.urls'))
+    path('timetable/', include('apps.timetable.urls')),
+    path('telegram/', include('apps.telegram.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
