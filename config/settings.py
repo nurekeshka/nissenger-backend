@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     # Project apps
     'apps.timetable.apps.TimetableConfig',
+    'apps.telegram.apps.TelegramConfig',
 ]
 
 MIDDLEWARE = [
