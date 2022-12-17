@@ -101,6 +101,7 @@ class TimetableLoadView(views.APIView):
                 group=group, timetable=timetable,
             )
 
+        timetable.activate()
         timetable.notify_admins()
         return Response(status=status.HTTP_201_CREATED)
 
