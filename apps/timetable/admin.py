@@ -92,4 +92,5 @@ class LessonAdmin(admin.ModelAdmin):
               'group', 'day', 'period', 'timetable')
     search_fields = ('subject__name', 'classroom__name', 'teacher__name',
                      'group__name', 'day__name', 'period__number')
-    list_filter = ('timetable__id', 'day__name', 'subject__name')
+    list_filter = ('timetable__id', 'day__name',
+                   'subject__name', 'period__number')
