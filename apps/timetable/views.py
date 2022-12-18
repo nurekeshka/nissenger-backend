@@ -146,9 +146,15 @@ class LessonsList(views.APIView):
                         group__name='мат10', group__classes__in=[__class], timetable=timetable
                     ))
                 else:
-                    lessons = lessons.union(models.Lesson.objects.filter(
+                    math = models.Lesson.objects.filter(
                         group__name='мат7', group__classes__in=[__class], timetable=timetable
-                    ))
+                    )
+
+                    for lesson in math.all():
+                        if models.Lesson.objects.filter(group=group, period=lesson.period, day=lesson.day, timetable=timetable).exists():
+                            math = math.exclude(id=lesson.pk)
+
+                    lessons = lessons.union(math.all())
 
             elif __class.grade == 10:
                 subject = models.Subject.objects.get(
