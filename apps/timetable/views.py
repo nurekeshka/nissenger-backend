@@ -102,7 +102,7 @@ class TimetableLoadView(views.APIView):
             )
 
         timetable.activate()
-        timetable.notify_admins()
+        timetable.report_to_parser()
         return Response(status=status.HTTP_201_CREATED)
 
 
