@@ -56,7 +56,7 @@ class Timetable(models.Model):
         self.active = False
         self.save()
 
-    def notify_admins(self):
+    def report_to_parser(self):
         info = (
             f'Timetable for {self.school} was created at: {self.downloaded}',
             'There are:',
@@ -67,7 +67,7 @@ class Timetable(models.Model):
             f'{Subject.objects.filter(timetable=self).count()} subjects',
         )
 
-        bot.send_to_admins('\n'.join(info))
+        bot.send_to_parser('\n'.join(info))
 
 
 class Subject(models.Model):
