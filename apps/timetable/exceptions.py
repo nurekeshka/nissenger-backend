@@ -32,11 +32,6 @@ class GroupNotFoundExceptionHandler(APIException):
     default_detail = 'Group not found in the database.'
 
 
-class ProfileGroupNotFoundExceptionHandler(APIException):
-    status_code = status.HTTP_410_GONE
-    default_detail = 'Profile group not found in the database.'
-
-
 class TeacherNotFoundExceptionHandler(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = 'Teacher not found in the database.'
