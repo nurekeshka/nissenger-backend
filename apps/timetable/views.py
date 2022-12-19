@@ -138,6 +138,12 @@ class LessonsList(views.APIView):
         if data.get('profile_groups'):
             if __class.grade >= 11:
                 for profile in data['profile_groups']:
+                    try:
+                        group = models.Group.objects.get(name=profile, classes__in=[
+                            __class], timetable=timetable)
+                    except models.Group.DoesNotExist:
+                        raise exceptions.ProfileGroupNotFoundExceptionHandler
+
                     lessons = lessons.union(models.Lesson.objects.filter(
                         group__name=profile, group__classes__in=[__class], timetable=timetable))
 
