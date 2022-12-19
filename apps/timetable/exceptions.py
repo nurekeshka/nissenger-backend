@@ -35,3 +35,8 @@ class GroupNotFoundExceptionHandler(APIException):
 class TeacherNotFoundExceptionHandler(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = 'Teacher not found in the database.'
+
+
+class SubjectNotFoundExceptionHandler(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = 'Subject not found in the database.'
