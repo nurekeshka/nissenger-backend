@@ -157,8 +157,11 @@ class LessonsList(views.APIView):
                     lessons = lessons.union(math.all())
 
             elif __class.grade == 10:
-                subject = models.Subject.objects.get(
-                    name=data['profile_groups'][0], type=models.Subject.MESK_PREPARATION, timetable=timetable)
+                try:
+                    subject = models.Subject.objects.get(
+                        name=data['profile_groups'][0], type=models.Subject.MESK_PREPARATION, timetable=timetable)
+                except models.Subject.DoesNotExist:
+                    raise exceptions.SubjectNotFoundExceptionHandler
 
                 lessons = lessons.union(models.Lesson.objects.filter(
                     subject=subject, group=group, timetable=timetable
