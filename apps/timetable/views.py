@@ -142,7 +142,7 @@ class LessonsList(views.APIView):
                         group = models.Group.objects.get(name=profile, classes__in=[
                             __class], timetable=timetable)
                     except models.Group.DoesNotExist:
-                        raise exceptions.ProfileGroupNotFoundExceptionHandler
+                        raise exceptions.GroupNotFoundExceptionHandler
 
                     lessons = lessons.union(models.Lesson.objects.filter(
                         group__name=profile, group__classes__in=[__class], timetable=timetable))
