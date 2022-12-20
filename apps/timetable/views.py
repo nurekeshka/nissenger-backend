@@ -133,10 +133,30 @@ class LessonsList(views.APIView):
         group = utils.search_for_group(
             data['group'], [__class], timetable).first()
         lessons = models.Lesson.objects.filter(group=group).exclude(
-            subject__type=models.Subject.MESK_PREPARATION)
+            subject__type=models.Subject.MESK_PREPARATION).exclude(
+                subject__type=models.Subject.PROFILE_DIRECTED, subject__name='Математика').exclude(
+                    subject__type=models.Subject.PROFILE_DIRECTED, subject__name='Математика (10)'
+        )
 
         if data.get('profile_groups'):
             if __class.grade >= 11:
+                if 'мат10' in data['profile_groups']:
+                    lessons = lessons.union(models.Lesson.objects.filter(
+                        group__classes__in=[__class], timetable=timetable,
+                        subject__type=models.Subject.PROFILE_DIRECTED,
+                        subject__name='Математика (10)',
+                    ))
+
+                    data['profile_groups'].remove('мат10')
+                else:
+                    math = models.Lesson.objects.filter(
+                        group=group, timetable=timetable,
+                        subject__type=models.Subject.PROFILE_DIRECTED,
+                        subject__name='Математика',
+                    )
+
+                    lessons = lessons.union(math.all())
+
                 for profile in data['profile_groups']:
                     try:
                         group = models.Group.objects.get(name=profile, classes__in=[
@@ -146,21 +166,6 @@ class LessonsList(views.APIView):
 
                     lessons = lessons.union(models.Lesson.objects.filter(
                         group__name=profile, group__classes__in=[__class], timetable=timetable))
-
-                if 'мат10' in data['profile_groups']:
-                    lessons = lessons.union(models.Lesson.objects.filter(
-                        group__name='мат10', group__classes__in=[__class], timetable=timetable
-                    ))
-                else:
-                    math = models.Lesson.objects.filter(
-                        group__name='мат7', group__classes__in=[__class], timetable=timetable
-                    )
-
-                    for lesson in math.all():
-                        if models.Lesson.objects.filter(group=group, period=lesson.period, day=lesson.day, timetable=timetable).exists():
-                            math = math.exclude(id=lesson.pk)
-
-                    lessons = lessons.union(math.all())
 
             elif __class.grade == 10:
                 try:
