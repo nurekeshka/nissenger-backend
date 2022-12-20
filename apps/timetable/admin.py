@@ -68,6 +68,7 @@ class SubjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'type', 'timetable')
     fields = ('name', 'type', 'timetable')
     list_filter = ('timetable__id',)
+    search_fields = ('name',)
 
 
 @admin.register(Classroom)
