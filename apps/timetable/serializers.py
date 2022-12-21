@@ -34,6 +34,18 @@ class GroupsListSerializer(GroupSerializer):
         }
 
 
+class ProfileGroupsListSerializer(GroupsListSerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        teachers = set()
+
+        for values in models.Lesson.objects.filter(group=instance).values('teacher'):
+            teachers.add(models.Teacher.objects.get(pk=values['teacher']).name)
+
+        data['teachers'] = teachers
+        return data
+
+
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Teacher

@@ -227,7 +227,7 @@ class ProfileGroupsList(views.APIView):
 
         groups = [models.Group.objects.get(pk=id) for id in unique_groups]
 
-        serializer = serializers.GroupsListSerializer(
+        serializer = serializers.ProfileGroupsListSerializer(
             instance=groups, many=True)
         return Response(data=serializer.data)
 
