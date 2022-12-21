@@ -70,10 +70,10 @@ def timetable(function):
                     school=school, active=True)
             except models.Timetable.DoesNotExist:
                 raise exceptions.TimetableNotFoundException()
-
-            return function(self, request, json, timetable, *args, **kwargs)
         except KeyError:
             raise exceptions.KeyErrorExceptionHandler(
                 'Timetable\'s school or city was not provided.')
+
+        return function(self, request, json, timetable, *args, **kwargs)
 
     return wrapper
