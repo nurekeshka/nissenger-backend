@@ -287,6 +287,21 @@ class Online(views.APIView):
         return Response()
 
 
+class ClassroomLessons(views.APIView):
+    @utils.json
+    @utils.timetable
+    def post(self, request, json, timetable, *args, **kwargs):
+        day = models.Day.objects.get(name=json['day'])
+        classroom = models.Classroom.objects.filter(name=json['classroom'])[0]
+        lessons = models.Lesson.objects.filter(day=day, classroom=classroom)
+
+        ls = []
+        for lesson in lessons.all():
+            ls.append(serializers.LessonsListSerializer(instance=lesson).data)
+
+        return Response(ls)
+
+
 class EmptyClassroom(views.APIView):
     @utils.json
     @utils.timetable
