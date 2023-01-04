@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import views
 
+from . import constants
 from . import serializers
 from . import exceptions
 from . import models
@@ -282,3 +285,41 @@ class MeskPreparationSubjects(views.APIView):
 class Online(views.APIView):
     def get(self, request: Request, *args, **kwargs):
         return Response()
+
+
+class EmptyClassroom(views.APIView):
+    @utils.json
+    @utils.timetable
+    def post(self, request: Request, json: dict, timetable: models.Timetable, *args, **kwargs):
+        now = datetime.now()
+        day = models.Day.objects.get(name=constants.DAYS[now.weekday()])
+
+        periods = models.Period.objects.filter(timetable=timetable).order_by('number')
+
+        time = now.time()
+        current = time.hour * 60 + time.minute
+        school_time = False
+
+        for period in periods:
+            if period.starttime.hour * 60 + period.starttime.minute > current:
+                school_time = True
+                break
+
+        if not school_time:
+            serializer = serializers.ClassroomSerializer(
+                instance=models.Classroom.objects.filter(timetable=timetable), many=True)
+            return Response(data=serializer.data)
+
+        period = models.Period.objects.get(timetable=timetable, number=1)
+
+        all_classrooms = set(map(lambda array: array[0], models.Classroom.objects.filter(
+            timetable=timetable).values_list('id')))
+        busy_classrooms = set(map(lambda array: array[0], models.Lesson.objects.filter(
+            period=period, day=day).values_list('classroom')))
+
+        empty_classrooms = [models.Classroom.objects.get(
+            pk=id) for id in all_classrooms.difference(busy_classrooms)]
+
+        serializer = serializers.ClassroomSerializer(
+            instance=empty_classrooms, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
