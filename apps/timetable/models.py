@@ -57,6 +57,13 @@ class Timetable(models.Model):
         self.save()
 
     def report_to_parser(self):
+        query = Classroom.objects.filter(timetable=self, name='')
+
+        if query.exists():
+            unknown_classroom = query.first()
+            lessons_number = Lesson.objects.filter(
+                timetable=self, classroom=unknown_classroom).count()
+
         info = (
             f'Timetable for {self.school} was created at: {self.downloaded}',
             'There are:',
@@ -65,6 +72,7 @@ class Timetable(models.Model):
             f'{Classroom.objects.filter(timetable=self).count()} classrooms',
             f'{Group.objects.filter(timetable=self).count()} groups',
             f'{Subject.objects.filter(timetable=self).count()} subjects',
+            f'{lessons_number} lessons with unknown classroom',
         )
 
         bot.send_to_parser('\n'.join(info))
