@@ -288,7 +288,8 @@ class EmptyClassroom(views.APIView):
         now = datetime.now()
         day = models.Day.objects.get(name=constants.DAYS[now.weekday()])
 
-        periods = models.Period.objects.filter(timetable=timetable).order_by('number')
+        periods = models.Period.objects.filter(
+            timetable=timetable).order_by('number')
 
         time = now.time()
         current = time.hour * 60 + time.minute
@@ -322,21 +323,26 @@ class EmptyClassroom(views.APIView):
 class ClassroomLessons(views.APIView):
     @utils.json
     @utils.timetable
-    def post(self, request, json, timetable, *args, **kwargs):
+    def post(self, request: Request, json: dict, timetable: models.Timetable, *args, **kwargs):
         try:
-            day_name = json.get('day', constants.DAYS[datetime.now().weekday()])
+            day_name = json.get(
+                'day', constants.DAYS[datetime.now().weekday()])
             day = models.Day.objects.get(name=day_name)
         except models.Day.DoesNotExist:
             raise exceptions.DayNotFoundExceptionHandler()
 
         try:
-            classroom = models.Classroom.objects.get(name=json['classroom'], timetable=timetable)
+            classroom = models.Classroom.objects.get(
+                name=json['classroom'], timetable=timetable)
         except KeyError:
-            raise exceptions.KeyErrorExceptionHandler('Classroom was not provided.')
+            raise exceptions.KeyErrorExceptionHandler(
+                'Classroom was not provided.')
         except models.Classroom.DoesNotExist:
             raise exceptions.ClassNotFoundException()
 
-        lessons = models.Lesson.objects.filter(day=day, classroom=classroom, timetable=timetable)
+        lessons = models.Lesson.objects.filter(
+            day=day, classroom=classroom, timetable=timetable)
 
-        serializer = serializers.LessonsListSerializer(instance=lessons, many=True)
+        serializer = serializers.LessonsListSerializer(
+            instance=lessons, many=True)
         return Response(data=serializer.data)
