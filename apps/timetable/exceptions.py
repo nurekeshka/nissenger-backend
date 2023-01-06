@@ -40,3 +40,8 @@ class TeacherNotFoundExceptionHandler(APIException):
 class SubjectNotFoundExceptionHandler(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = 'Subject not found in the database.'
+
+
+class DayNotFoundExceptionHandler(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = 'City not found in the database.'
