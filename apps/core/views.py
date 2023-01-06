@@ -1,11 +1,8 @@
-from rest_framework.response import Response
+from rest_framework import generics, status, views
 from rest_framework.request import Request
-from rest_framework import generics
-from rest_framework import status
-from rest_framework import views
+from rest_framework.response import Response
 
-from . import serializers
-from . import models
+from . import models, serializers
 
 
 class GetLatestAndCreateVersion(generics.CreateAPIView):

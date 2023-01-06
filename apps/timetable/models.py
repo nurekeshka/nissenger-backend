@@ -1,9 +1,8 @@
 from datetime import datetime, time
 from typing import Set
+
 from django.db import models
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from apps.telegram.models import bot
 
 

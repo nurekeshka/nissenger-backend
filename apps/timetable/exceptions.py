@@ -1,5 +1,5 @@
-from rest_framework.exceptions import APIException
 from rest_framework import status
+from rest_framework.exceptions import APIException
 
 
 class TimetableNotFoundException(APIException):
@@ -40,3 +40,8 @@ class TeacherNotFoundExceptionHandler(APIException):
 class SubjectNotFoundExceptionHandler(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = 'Subject not found in the database.'
+
+
+class DayNotFoundExceptionHandler(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = 'City not found in the database.'

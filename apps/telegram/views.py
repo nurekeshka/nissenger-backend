@@ -1,7 +1,8 @@
-from rest_framework.response import Response
-from rest_framework.request import Request
-from apps.telegram.models import bot
 from rest_framework import views
+from rest_framework.request import Request
+from rest_framework.response import Response
+
+from apps.telegram.models import bot
 from apps.timetable import utils
 
 

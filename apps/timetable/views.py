@@ -1,16 +1,10 @@
 from datetime import datetime
 
-from rest_framework.response import Response
+from rest_framework import generics, status, views
 from rest_framework.request import Request
-from rest_framework import generics
-from rest_framework import status
-from rest_framework import views
+from rest_framework.response import Response
 
-from . import constants
-from . import serializers
-from . import exceptions
-from . import models
-from . import utils
+from . import constants, exceptions, models, serializers, utils
 
 
 class SearchClass(views.APIView):
@@ -287,21 +281,6 @@ class Online(views.APIView):
         return Response()
 
 
-class ClassroomLessons(views.APIView):
-    @utils.json
-    @utils.timetable
-    def post(self, request, json, timetable, *args, **kwargs):
-        day = models.Day.objects.get(name=json['day'])
-        classroom = models.Classroom.objects.filter(name=json['classroom'])[0]
-        lessons = models.Lesson.objects.filter(day=day, classroom=classroom)
-
-        ls = []
-        for lesson in lessons.all():
-            ls.append(serializers.LessonsListSerializer(instance=lesson).data)
-
-        return Response(ls)
-
-
 class EmptyClassroom(views.APIView):
     @utils.json
     @utils.timetable
@@ -338,3 +317,26 @@ class EmptyClassroom(views.APIView):
         serializer = serializers.ClassroomSerializer(
             instance=empty_classrooms, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class ClassroomLessons(views.APIView):
+    @utils.json
+    @utils.timetable
+    def post(self, request, json, timetable, *args, **kwargs):
+        try:
+            day_name = json.get('day', constants.DAYS[datetime.now().weekday()])
+            day = models.Day.objects.get(name=day_name)
+        except models.Day.DoesNotExist:
+            raise exceptions.DayNotFoundExceptionHandler()
+
+        try:
+            classroom = models.Classroom.objects.get(name=json['classroom'], timetable=timetable)
+        except KeyError:
+            raise exceptions.KeyErrorExceptionHandler('Classroom was not provided.')
+        except models.Classroom.DoesNotExist:
+            raise exceptions.ClassNotFoundException()
+
+        lessons = models.Lesson.objects.filter(day=day, classroom=classroom, timetable=timetable)
+
+        serializer = serializers.LessonsListSerializer(instance=lessons, many=True)
+        return Response(data=serializer.data)

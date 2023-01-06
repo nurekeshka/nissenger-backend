@@ -1,11 +1,11 @@
-from rest_framework.parsers import JSONParser
-from django.db.models import Count
+import io
 from typing import List
 
+from django.db.models import Count
+from rest_framework.parsers import JSONParser
+
+from . import exceptions, models
 from .constants import DAYS
-from . import exceptions
-from . import models
-import io
 
 
 def initialize_days():
