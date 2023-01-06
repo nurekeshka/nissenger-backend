@@ -20,4 +20,6 @@ urlpatterns = [
          name='list-mesk-subjects'),
     path('available/', views.Online.as_view(), name='is-available'),
     path('classrooms/empty/', views.EmptyClassroom.as_view(), name='empty-classroom'),
+    path('classroom/lessons/', views.ClassroomLessons.as_view(),
+         name='classroom-lessons')
 ]
