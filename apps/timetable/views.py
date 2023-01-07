@@ -289,7 +289,8 @@ class EmptyClassroom(views.APIView):
         try:
             day = models.Day.objects.get(name=constants.DAYS[now.weekday()])
         except models.Day.DoesNotExist:
-            classrooms = models.Classroom.objects.filter(timetable=timetable)
+            classrooms = models.Classroom.objects.filter(
+                timetable=timetable).exclude(name='')
             serializer = serializers.ClassroomSerializer(
                 instance=classrooms, many=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -314,9 +315,9 @@ class EmptyClassroom(views.APIView):
         period = models.Period.objects.get(timetable=timetable, number=1)
 
         all_classrooms = set(map(lambda array: array[0], models.Classroom.objects.filter(
-            timetable=timetable).values_list('id')))
+            timetable=timetable).exclude(name='').values_list('id')))
         busy_classrooms = set(map(lambda array: array[0], models.Lesson.objects.filter(
-            period=period, day=day).values_list('classroom')))
+            period=period, day=day).exclude(name='').values_list('classroom')))
 
         empty_classrooms = [models.Classroom.objects.get(
             pk=id) for id in all_classrooms.difference(busy_classrooms)]
