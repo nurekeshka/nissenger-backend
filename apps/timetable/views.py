@@ -286,7 +286,13 @@ class EmptyClassroom(views.APIView):
     @utils.timetable
     def post(self, request: Request, json: dict, timetable: models.Timetable, *args, **kwargs):
         now = datetime.now()
-        day = models.Day.objects.get(name=constants.DAYS[now.weekday()])
+        try:
+            day = models.Day.objects.get(name=constants.DAYS[now.weekday()])
+        except models.Day.DoesNotExist:
+            classrooms = models.Classroom.objects.filter(timetable=timetable)
+            serializer = serializers.ClassroomSerializer(
+                instance=classrooms, many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         periods = models.Period.objects.filter(
             timetable=timetable).order_by('number')
