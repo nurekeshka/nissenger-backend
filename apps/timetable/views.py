@@ -318,7 +318,7 @@ class EmptyClassroom(views.APIView):
         all_classrooms = set(map(lambda array: array[0], models.Classroom.objects.filter(
             timetable=timetable).exclude(name='').values_list('id')))
         busy_classrooms = set(map(lambda array: array[0], models.Lesson.objects.filter(
-            period=period, day=day).exclude(name='').values_list('classroom')))
+            period=period, day=day).exclude(classroom__name='').values_list('classroom')))
 
         empty_classrooms = [models.Classroom.objects.get(
             pk=id) for id in all_classrooms.difference(busy_classrooms)]
